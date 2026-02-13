@@ -36,73 +36,85 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginBloc, LoginState>(
-      listener: (context, state) {
-        if (state is LoginSuccess) {
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, authState) {
+        if (authState is AuthFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Welcome ${state.user.name}!'),
-              backgroundColor: Colors.green,
+              content: Text(authState.error),
+              backgroundColor: Colors.red,
             ),
-          );
-        } else if (state is LoginFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.error), backgroundColor: Colors.red),
           );
         }
       },
-      child: BlocBuilder<LoginBloc, LoginState>(
-        builder: (context, state) {
-          return Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                EmailTextField(controller: _emailController),
-                const SizedBox(height: 16),
-                PasswordTextField(controller: _passwordController),
-                const SizedBox(height: 24),
-                LoginButton(
-                  isLoading: state is LoginLoading,
-                  onPressed: state is LoginLoading
-                      ? () {}
-                      : () {
-                          if (_formKey.currentState!.validate()) {
-                            context.read<LoginBloc>().add(
-                              LoginSubmitted(
-                                email: _emailController.text.trim(),
-                                password: _passwordController.text,
-                              ),
-                            );
-                          }
-                        },
-                ),
-                const SizedBox(height: 16),
-                ForgotButton(onPressed: () {}),
-                const SizedBox(height: 16),
-                BlocBuilder<AuthBloc, AuthState>(
-                  builder: (context, authState) {
-                    return SignWithGoogleButton(
-                      isLoading: authState is AuthLoading,
-                      onPressed: authState is AuthLoading
-                          ? () {}
-                          : () {
-                              context.read<AuthBloc>().add(
-                                const AuthGoogleSignInRequested(),
-                              );
-                            },
-                    );
-                  },
-                ),
-                const Divider(height: 32),
-                SignUpButton(
-                  onPressed: () {
-                    context.router.push(SignupScreenRoute());
-                  },
-                ),
-              ],
-            ),
-          );
+      child: BlocListener<LoginBloc, LoginState>(
+        listener: (context, state) {
+          if (state is LoginSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Welcome ${state.user.name}!'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          } else if (state is LoginFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.error), backgroundColor: Colors.red),
+            );
+          }
         },
+        child: BlocBuilder<LoginBloc, LoginState>(
+          builder: (context, state) {
+            return Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  EmailTextField(controller: _emailController),
+                  const SizedBox(height: 16),
+                  PasswordTextField(controller: _passwordController),
+                  const SizedBox(height: 24),
+                  LoginButton(
+                    isLoading: state is LoginLoading,
+                    onPressed: state is LoginLoading
+                        ? () {}
+                        : () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<LoginBloc>().add(
+                                LoginSubmitted(
+                                  email: _emailController.text.trim(),
+                                  password: _passwordController.text,
+                                ),
+                              );
+                            }
+                          },
+                  ),
+                  const SizedBox(height: 16),
+                  ForgotButton(onPressed: () {}),
+                  const SizedBox(height: 16),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, authState) {
+                      return SignWithGoogleButton(
+                        isLoading: authState is AuthLoading,
+                        onPressed: authState is AuthLoading
+                            ? () {}
+                            : () {
+                                context.read<AuthBloc>().add(
+                                  const AuthGoogleSignInRequested(),
+                                );
+                              },
+                      );
+                    },
+                  ),
+                  const Divider(height: 32),
+                  SignUpButton(
+                    onPressed: () {
+                      context.router.push(SignupScreenRoute());
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

@@ -19,7 +19,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     Emitter<RegisterState> emit,
   ) async {
     emit(RegisterLoading());
-
     try {
       final result = await registerUseCase(
         email: event.email,

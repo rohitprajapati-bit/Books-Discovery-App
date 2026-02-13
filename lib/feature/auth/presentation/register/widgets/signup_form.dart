@@ -40,25 +40,43 @@ class _SignupFormState extends State<SignupForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RegisterBloc, RegisterState>(
-      listener: (context, state) {
-        if (state is RegisterSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'Welcome ${state.user.name}! Account created successfully.',
-              ),
-              backgroundColor: Colors.green,
-            ),
-          );
-          // Navigate back to login or home
-          Navigator.pop(context);
-        } else if (state is RegisterFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.error), backgroundColor: Colors.red),
-          );
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AuthBloc, AuthState>(
+          listener: (context, authState) {
+            if (authState is AuthFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(authState.error),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
+        ),
+        BlocListener<RegisterBloc, RegisterState>(
+          listener: (context, state) {
+            if (state is RegisterSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Welcome ${state.user.name}! Account created successfully.',
+                  ),
+                  backgroundColor: Colors.green,
+                ),
+              );
+              Navigator.pop(context);
+            } else if (state is RegisterFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.error),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
+        ),
+      ],
       child: BlocBuilder<RegisterBloc, RegisterState>(
         builder: (context, state) {
           final isLoading = state is RegisterLoading;
@@ -72,7 +90,10 @@ class _SignupFormState extends State<SignupForm> {
                   const SizedBox(height: 16),
                   EmailTextField(controller: _emailController),
                   const SizedBox(height: 16),
-                  PasswordTextField(controller: _passwordController),
+                  PasswordTextField(
+                    controller: _passwordController,
+                    isRegistration: true,
+                  ),
                   const SizedBox(height: 16),
                   ConfirmPasswordTextField(
                     controller: _confirmPasswordController,

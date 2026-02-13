@@ -26,8 +26,6 @@ class _ConfirmPasswordTextFieldState extends State<ConfirmPasswordTextField> {
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please confirm your password';
-        } else if (value.length < 6) {
-          return 'Password must be at least 6 characters';
         } else if (value != widget.passwordController.text) {
           return 'Passwords do not match';
         }
