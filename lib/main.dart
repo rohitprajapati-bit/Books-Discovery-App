@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:auto_route/auto_route.dart';
 
 import 'core/di/injection_container.dart';
 import 'core/router/routes.dart';
 import 'core/router/routes.gr.dart';
 import 'firebase_options.dart';
 import 'feature/auth/presentation/bloc/auth_bloc.dart';
-import 'feature/auth/presentation/bloc/auth_event.dart';
-import 'feature/auth/presentation/bloc/auth_state.dart';
 import 'feature/auth/presentation/login/bloc/login_bloc.dart';
 import 'feature/auth/presentation/register/bloc/register_bloc.dart';
 
@@ -45,13 +42,10 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          print('Auth state changed: ${state.runtimeType}'); // Debug log
           if (state is Authenticated) {
-            print('Navigating to HomeScreen'); // Debug log
-            _appRouter.replaceAll([const HomeScreenRoute()]);
+            _appRouter.replaceAll([const MainNavigationShellRoute()]);
           } else if (state is Unauthenticated) {
-            print('Navigating to LoginScreen'); // Debug log
-            _appRouter.replaceAll([const LoginScreenRoute()]);
+            _appRouter.replaceAll([const LoginRoute()]);
           }
         },
         child: MaterialApp.router(

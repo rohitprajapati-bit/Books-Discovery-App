@@ -8,8 +8,8 @@ import 'layouts/mobile_signup_screen.dart';
 import 'layouts/tablet_signup_screen.dart';
 
 @RoutePage()
-class SignupScreen extends StatelessWidget {
-  const SignupScreen({super.key});
+class SignupPage extends StatelessWidget {
+  const SignupPage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:books_discovery_app/feature/auth/presentation/bloc/auth_bloc.dart';
-import 'package:books_discovery_app/feature/auth/presentation/bloc/auth_event.dart';
-import 'package:books_discovery_app/feature/auth/presentation/bloc/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/router/routes.gr.dart';
@@ -107,7 +105,7 @@ class _LoginFormState extends State<LoginForm> {
                   const Divider(height: 32),
                   SignUpButton(
                     onPressed: () {
-                      context.router.push(SignupScreenRoute());
+                      context.router.push(const SignupRoute());
                     },
                   ),
                 ],

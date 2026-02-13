@@ -7,6 +7,9 @@ import '../../domain/usecases/logout_usecase.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
+export 'auth_event.dart';
+export 'auth_state.dart';
+
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final GetCurrentUserUseCase getCurrentUserUseCase;
   final LogoutUseCase logoutUseCase;
@@ -45,7 +48,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(Unauthenticated());
     } catch (e) {
       // Log error but still emit unauthenticated to force logout on UI
-      print('Logout error: $e');
       emit(Unauthenticated());
     }
   }

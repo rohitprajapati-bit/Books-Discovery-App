@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/auth_bloc.dart';
-import '../../bloc/auth_event.dart';
-import '../../bloc/auth_state.dart';
 import '../../shared/widgets/sign_with_google_button.dart';
 import 'confirm_password_field.dart';
 import '../../shared/widgets/email_field.dart';

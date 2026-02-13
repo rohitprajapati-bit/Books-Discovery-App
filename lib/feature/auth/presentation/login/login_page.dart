@@ -6,8 +6,8 @@ import 'layouts/mobile_login_screen.dart';
 import 'layouts/tablet_login_screen.dart';
 
 @RoutePage()
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {

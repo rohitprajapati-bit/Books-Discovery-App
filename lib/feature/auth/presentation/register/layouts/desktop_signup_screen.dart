@@ -22,7 +22,9 @@ class DesktopSignupScreen extends StatelessWidget {
                   ),
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
-                    Theme.of(context).colorScheme.primary.withOpacity(0.4),
+                    Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.4),
                     BlendMode.darken,
                   ),
                 ),
@@ -48,7 +50,7 @@ class DesktopSignupScreen extends StatelessWidget {
                           Shadow(
                             offset: const Offset(2, 2),
                             blurRadius: 4,
-                            color: Colors.black.withOpacity(0.5),
+                            color: Colors.black.withValues(alpha: 0.5),
                           ),
                         ],
                       ),

@@ -26,7 +26,9 @@ class _DesktopLoginScreenState extends State<DesktopLoginScreen> {
                   ),
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
-                    Theme.of(context).colorScheme.primary.withOpacity(0.4),
+                    Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.4),
                     BlendMode.darken,
                   ),
                 ),
@@ -52,7 +54,7 @@ class _DesktopLoginScreenState extends State<DesktopLoginScreen> {
                           Shadow(
                             offset: const Offset(2, 2),
                             blurRadius: 4,
-                            color: Colors.black.withOpacity(0.5),
+                            color: Colors.black.withValues(alpha: 0.5),
                           ),
                         ],
                       ),

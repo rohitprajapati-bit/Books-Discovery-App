@@ -4,9 +4,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
-  
   Future<UserModel> login({required String email, required String password});
-  
+
   Future<UserModel> register({
     required String email,
     required String password,
@@ -18,7 +17,7 @@ abstract class AuthRemoteDataSource {
   Future<void> logout();
 
   Future<UserModel?> getCurrentUser();
-  
+
   Stream<UserModel?> get authStateChanges;
 }
 
@@ -171,19 +170,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String name,
   }) async {
     try {
-      print(
-        'Attempting to save user to Firestore: uid=$uid, email=$email, name=$name',
-      );
       await firestore.collection('users').doc(uid).set({
         'uid': uid,
         'email': email,
         'name': name,
         'createdAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
-      print('Successfully saved user to Firestore');
     } catch (e) {
-      print('Firestore save error: ${e.toString()}');
-      print('Error type: ${e.runtimeType}');
       throw Exception('Failed to save user data: ${e.toString()}');
     }
   }
