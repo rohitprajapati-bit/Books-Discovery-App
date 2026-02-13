@@ -16,6 +16,16 @@ import '../../feature/auth/domain/usecases/register_usecase.dart';
 import '../../feature/auth/presentation/bloc/auth_bloc.dart';
 import '../../feature/auth/presentation/login/bloc/login_bloc.dart';
 import '../../feature/auth/presentation/register/bloc/register_bloc.dart';
+import '../../feature/home/data/datasources/book_local_datasource.dart';
+import '../../feature/home/data/datasources/book_remote_datasource.dart';
+import '../../feature/home/data/repositories/book_repository_impl.dart';
+import '../../feature/home/domain/repositories/book_repository.dart';
+import '../../feature/home/domain/usecases/clear_search_history_usecase.dart';
+import '../../feature/home/domain/usecases/get_search_history_usecase.dart';
+import '../../feature/home/domain/usecases/save_search_history_usecase.dart';
+import '../../feature/home/domain/usecases/search_books_usecase.dart';
+import '../../feature/home/presentation/bloc/home_bloc.dart';
+import '../network/dio_client.dart';
 
 final sl = GetIt.instance; // sl = Service Locator
 
@@ -40,6 +50,9 @@ Future<void> initializeDependencies() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
 
+  // Dio Client
+  sl.registerLazySingleton<DioClient>(() => DioClient());
+
   // ============================================================================
   // Data Sources
   // ============================================================================
@@ -56,12 +69,24 @@ Future<void> initializeDependencies() async {
     () => AuthLocalDataSourceImpl(sharedPreferences: sl()),
   );
 
+  sl.registerLazySingleton<BookRemoteDataSource>(
+    () => BookRemoteDataSourceImpl(dioClient: sl()),
+  );
+
+  sl.registerLazySingleton<BookLocalDataSource>(
+    () => BookLocalDataSourceImpl(sharedPreferences: sl()),
+  );
+
   // ============================================================================
   // Repositories
   // ============================================================================
 
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()),
+  );
+
+  sl.registerLazySingleton<BookRepository>(
+    () => BookRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()),
   );
 
   // ============================================================================
@@ -73,6 +98,11 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => GoogleSignInUseCase(sl()));
   sl.registerLazySingleton(() => LogoutUseCase(sl()));
   sl.registerLazySingleton(() => GetCurrentUserUseCase(sl()));
+
+  sl.registerLazySingleton(() => SearchBooksUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetSearchHistoryUseCase(repository: sl()));
+  sl.registerLazySingleton(() => SaveSearchHistoryUseCase(repository: sl()));
+  sl.registerLazySingleton(() => ClearSearchHistoryUseCase(repository: sl()));
 
   // ============================================================================
   // BLoCs (Factory - new instance every time)
@@ -95,5 +125,15 @@ Future<void> initializeDependencies() async {
   // Register BLoC - Factory (new instance every time, needs AuthBloc)
   sl.registerFactory<RegisterBloc>(
     () => RegisterBloc(registerUseCase: sl(), authBloc: sl()),
+  );
+
+  // Home BLoC
+  sl.registerFactory<HomeBloc>(
+    () => HomeBloc(
+      searchBooksUseCase: sl(),
+      getSearchHistoryUseCase: sl(),
+      saveSearchHistoryUseCase: sl(),
+      clearSearchHistoryUseCase: sl(),
+    ),
   );
 }

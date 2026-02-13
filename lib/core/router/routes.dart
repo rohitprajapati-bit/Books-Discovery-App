@@ -21,7 +21,10 @@ class AppRouter extends RootStackRouter {
           page: HomeTabRoute.page,
           path: 'home',
           initial: true,
-          children: [AutoRoute(page: HomeRoute.page, path: '', initial: true)],
+          children: [
+            AutoRoute(page: HomeRoute.page, path: '', initial: true),
+            AutoRoute(page: BookDetailsRoute.page, path: 'details'),
+          ],
         ),
         AutoRoute(
           page: AnalyticsTabRoute.page,
