@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "760708571143",
+    "project_id": "books-discovery-app-aba6e",
+    "storage_bucket": "books-discovery-app-aba6e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:760708571143:android:7b8f006bd7f80222adcaa2",
+        "android_client_info": {
+          "package_name": "com.digitalsolt.books_discovery_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfKNtrz3xz1TRkrSq80GhygUIlVtvm3EY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
