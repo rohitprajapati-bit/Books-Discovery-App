@@ -12,7 +12,20 @@
           "package_name": "com.digitalsolt.books_discovery_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "760708571143-nendokbf3u5u5snkhne8n3tinru7amo0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.digitalsolt.books_discovery_app",
+            "certificate_hash": "4a346ed75e46b04ab2503fcf9f6691712b5358aa"
+          }
+        },
+        {
+          "client_id": "760708571143-i6sbmk5q84tsajdh1mt185asdj9eaqqd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBfKNtrz3xz1TRkrSq80GhygUIlVtvm3EY"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "760708571143-i6sbmk5q84tsajdh1mt185asdj9eaqqd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
