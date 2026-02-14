@@ -1,5 +1,5 @@
-import '../../domain/entities/book.dart';
-import '../../domain/repositories/book_repository.dart';
+import '../../../home/domain/entities/book.dart';
+import '../../../home/domain/repositories/book_repository.dart';
 
 class GetCachedBooksUseCase {
   final BookRepository repository;

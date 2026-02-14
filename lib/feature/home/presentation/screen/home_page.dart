@@ -8,8 +8,8 @@ import 'package:books_discovery_app/feature/home/presentation/layouts/mobile_hom
 import 'package:books_discovery_app/feature/home/presentation/layouts/tablet_home_screen.dart';
 
 import 'package:books_discovery_app/feature/auth/presentation/bloc/auth_bloc.dart';
-import 'package:books_discovery_app/feature/home/presentation/bloc/analytics_bloc.dart';
-import 'package:books_discovery_app/feature/home/presentation/bloc/analytics_event.dart';
+import 'package:books_discovery_app/feature/analytics/presentation/bloc/analytics_bloc.dart';
+import 'package:books_discovery_app/feature/analytics/presentation/bloc/analytics_event.dart';
 
 @RoutePage()
 class HomePage extends StatefulWidget {

@@ -20,6 +20,8 @@ import 'package:books_discovery_app/core/navigation/tabs/home_tab_page.dart'
     as _i7;
 import 'package:books_discovery_app/core/navigation/tabs/profile_tab_page.dart'
     as _i11;
+import 'package:books_discovery_app/feature/analytics/presentation/screen/analytics_page.dart'
+    as _i1;
 import 'package:books_discovery_app/feature/auth/presentation/login/login_page.dart'
     as _i8;
 import 'package:books_discovery_app/feature/auth/presentation/register/signup_page.dart'
@@ -30,8 +32,6 @@ import 'package:books_discovery_app/feature/contacts/presentation/screen/contact
     as _i4;
 import 'package:books_discovery_app/feature/home/domain/entities/book.dart'
     as _i17;
-import 'package:books_discovery_app/feature/home/presentation/screen/analytics_page.dart'
-    as _i1;
 import 'package:books_discovery_app/feature/home/presentation/screen/book_details_page.dart'
     as _i3;
 import 'package:books_discovery_app/feature/home/presentation/screen/home_page.dart'

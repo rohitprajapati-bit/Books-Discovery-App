@@ -4,7 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:books_discovery_app/feature/profile/presentation/bloc/profile_bloc.dart';
+import '../../feature/profile/presentation/bloc/profile_bloc.dart';
+import '../../feature/profile/data/datasources/profile_remote_datasource.dart';
+import '../../feature/profile/data/repositories/profile_repository_impl.dart';
+import '../../feature/profile/domain/repositories/profile_repository.dart';
+import '../../feature/profile/domain/usecases/update_profile_picture_usecase.dart';
+import '../../feature/profile/domain/usecases/update_profile_name_usecase.dart';
 
 import '../../feature/auth/data/datasources/auth_local_datasource.dart';
 import '../../feature/auth/data/datasources/auth_remote_datasource.dart';
@@ -37,9 +42,9 @@ import '../../feature/home/data/services/ocr_service.dart';
 import '../../feature/home/data/services/gemini_service_impl.dart';
 import '../../feature/home/presentation/bloc/home_bloc.dart';
 import '../../feature/home/presentation/bloc/book_details_bloc.dart';
-import '../../feature/home/presentation/bloc/analytics_bloc.dart';
-import '../../feature/home/domain/usecases/get_cached_books_usecase.dart';
-import '../../feature/home/data/services/trending_socket_service.dart';
+import '../../feature/analytics/presentation/bloc/analytics_bloc.dart';
+import '../../feature/analytics/domain/usecases/get_cached_books_usecase.dart';
+import '../../feature/analytics/data/services/trending_socket_service.dart';
 import '../../feature/contacts/domain/repositories/contacts_repository.dart';
 import '../../feature/contacts/data/repositories/contacts_repository_impl.dart';
 import '../../feature/contacts/domain/usecases/get_contacts_usecase.dart';
@@ -88,6 +93,14 @@ Future<void> initializeDependencies() async {
     ),
   );
 
+  sl.registerLazySingleton<ProfileRemoteDataSource>(
+    () => ProfileRemoteDataSourceImpl(
+      firebaseAuth: sl(),
+      firestore: sl(),
+      storage: sl(),
+    ),
+  );
+
   sl.registerLazySingleton<AuthLocalDataSource>(
     () => AuthLocalDataSourceImpl(sharedPreferences: sl()),
   );
@@ -114,6 +127,10 @@ Future<void> initializeDependencies() async {
   // Repositories
   // ============================================================================
 
+  sl.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(remoteDataSource: sl()),
+  );
+
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()),
   );
@@ -133,6 +150,9 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => GoogleSignInUseCase(sl()));
   sl.registerLazySingleton(() => LogoutUseCase(sl()));
   sl.registerLazySingleton(() => GetCurrentUserUseCase(sl()));
+
+  sl.registerLazySingleton(() => UpdateProfilePictureUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateProfileNameUseCase(sl()));
 
   sl.registerLazySingleton(() => SearchBooksUseCase(repository: sl()));
   sl.registerLazySingleton(() => SearchBooksByISBNUseCase(sl()));
@@ -199,5 +219,10 @@ Future<void> initializeDependencies() async {
     () => ContactsBloc(getContactsUseCase: sl()),
   );
 
-  sl.registerFactory<ProfileBloc>(() => ProfileBloc(authRepository: sl()));
+  sl.registerFactory<ProfileBloc>(
+    () => ProfileBloc(
+      updateProfilePictureUseCase: sl(),
+      updateProfileNameUseCase: sl(),
+    ),
+  );
 }

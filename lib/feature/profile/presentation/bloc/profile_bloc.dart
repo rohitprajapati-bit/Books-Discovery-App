@@ -1,13 +1,18 @@
 import 'dart:developer' as dev;
 import 'package:bloc/bloc.dart';
-import 'package:books_discovery_app/feature/auth/domain/repositories/auth_repository.dart';
+import '../../domain/usecases/update_profile_picture_usecase.dart';
+import '../../domain/usecases/update_profile_name_usecase.dart';
 import 'profile_event.dart';
 import 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  final AuthRepository authRepository;
+  final UpdateProfilePictureUseCase updateProfilePictureUseCase;
+  final UpdateProfileNameUseCase updateProfileNameUseCase;
 
-  ProfileBloc({required this.authRepository}) : super(ProfileInitial()) {
+  ProfileBloc({
+    required this.updateProfilePictureUseCase,
+    required this.updateProfileNameUseCase,
+  }) : super(ProfileInitial()) {
     on<UpdateProfilePictureRequested>(_onUpdateProfilePicture);
     on<UpdateProfileNameRequested>(_onUpdateProfileName);
   }
@@ -22,7 +27,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       name: 'ProfileBloc',
     );
     try {
-      final user = await authRepository.updateProfilePicture(event.filePath);
+      final user = await updateProfilePictureUseCase.execute(event.filePath);
       dev.log(
         'Update success. New photoUrl: ${user.photoUrl}',
         name: 'ProfileBloc',
@@ -49,7 +54,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       name: 'ProfileBloc',
     );
     try {
-      final user = await authRepository.updateProfileName(event.newName);
+      final user = await updateProfileNameUseCase.execute(event.newName);
       dev.log('Update success. New name: ${user.name}', name: 'ProfileBloc');
       emit(ProfileUpdateSuccess(user));
     } catch (e, stack) {

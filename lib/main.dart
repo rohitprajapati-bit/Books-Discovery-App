@@ -7,14 +7,14 @@ import 'core/bloc/app_bloc_observer.dart';
 import 'core/di/injection_container.dart';
 import 'core/router/routes.dart';
 import 'core/router/routes.gr.dart';
-import 'feature/home/presentation/bloc/analytics_event.dart';
+import 'feature/analytics/presentation/bloc/analytics_event.dart';
 import 'firebase_options.dart';
 import 'feature/auth/presentation/bloc/auth_bloc.dart';
 import 'feature/auth/presentation/login/bloc/login_bloc.dart';
 import 'feature/auth/presentation/register/bloc/register_bloc.dart';
 import 'feature/home/presentation/bloc/home_bloc.dart';
 import 'feature/home/presentation/bloc/book_details_bloc.dart';
-import 'feature/home/presentation/bloc/analytics_bloc.dart';
+import 'feature/analytics/presentation/bloc/analytics_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
