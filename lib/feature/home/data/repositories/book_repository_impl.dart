@@ -18,6 +18,11 @@ class BookRepositoryImpl implements BookRepository {
   }
 
   @override
+  Future<List<Book>> searchBooksByISBN(String isbn) async {
+    return await remoteDataSource.searchBooksByISBN(isbn);
+  }
+
+  @override
   Future<List<String>> getSearchHistory() async {
     return await localDataSource.getSearchHistory();
   }

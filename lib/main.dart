@@ -11,6 +11,7 @@ import 'firebase_options.dart';
 import 'feature/auth/presentation/bloc/auth_bloc.dart';
 import 'feature/auth/presentation/login/bloc/login_bloc.dart';
 import 'feature/auth/presentation/register/bloc/register_bloc.dart';
+import 'feature/home/presentation/bloc/home_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +46,10 @@ class MyApp extends StatelessWidget {
         BlocProvider<LoginBloc>(create: (context) => sl<LoginBloc>()),
         // Register BLoC - Factory from GetIt
         BlocProvider<RegisterBloc>(create: (context) => sl<RegisterBloc>()),
+        // Global Home BLoC - Factory from GetIt (initialized with history)
+        BlocProvider<HomeBloc>(
+          create: (context) => sl<HomeBloc>()..add(LoadSearchHistoryEvent()),
+        ),
       ],
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {

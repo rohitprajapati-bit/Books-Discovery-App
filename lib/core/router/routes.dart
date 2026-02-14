@@ -24,6 +24,7 @@ class AppRouter extends RootStackRouter {
           children: [
             AutoRoute(page: HomeRoute.page, path: '', initial: true),
             AutoRoute(page: BookDetailsRoute.page, path: 'details'),
+            AutoRoute(page: QRScannerRoute.page, path: 'scan'),
           ],
         ),
         AutoRoute(

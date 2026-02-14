@@ -21,3 +21,12 @@ class LoadSearchHistoryEvent extends HomeEvent {}
 class ClearSearchHistoryEvent extends HomeEvent {}
 
 class ToggleViewModeEvent extends HomeEvent {}
+
+class ScanQRCodeEvent extends HomeEvent {}
+
+class QRCodeScannedEvent extends HomeEvent {
+  final String isbn;
+  const QRCodeScannedEvent(this.isbn);
+  @override
+  List<Object> get props => [isbn];
+}

@@ -24,6 +24,7 @@ import '../../feature/home/domain/usecases/clear_search_history_usecase.dart';
 import '../../feature/home/domain/usecases/get_search_history_usecase.dart';
 import '../../feature/home/domain/usecases/save_search_history_usecase.dart';
 import '../../feature/home/domain/usecases/search_books_usecase.dart';
+import '../../feature/home/domain/usecases/search_books_by_isbn_usecase.dart';
 import '../../feature/home/presentation/bloc/home_bloc.dart';
 import '../network/dio_client.dart';
 
@@ -100,6 +101,7 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => GetCurrentUserUseCase(sl()));
 
   sl.registerLazySingleton(() => SearchBooksUseCase(repository: sl()));
+  sl.registerLazySingleton(() => SearchBooksByISBNUseCase(sl()));
   sl.registerLazySingleton(() => GetSearchHistoryUseCase(repository: sl()));
   sl.registerLazySingleton(() => SaveSearchHistoryUseCase(repository: sl()));
   sl.registerLazySingleton(() => ClearSearchHistoryUseCase(repository: sl()));
@@ -131,6 +133,7 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<HomeBloc>(
     () => HomeBloc(
       searchBooksUseCase: sl(),
+      searchBooksByISBNUseCase: sl(),
       getSearchHistoryUseCase: sl(),
       saveSearchHistoryUseCase: sl(),
       clearSearchHistoryUseCase: sl(),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:books_discovery_app/core/router/routes.gr.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:books_discovery_app/feature/home/presentation/bloc/home_bloc.dart';
 import 'package:books_discovery_app/feature/home/presentation/widgets/search_bar_widget.dart';
@@ -12,7 +14,39 @@ class DesktopHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Book Discovery - Desktop')),
+      appBar: AppBar(
+        title: const Text('Book Discovery - Desktop'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Scan QR Code'),
+                  content: const Text(
+                    'For the best experience, please use the mobile app to scan book QR codes. Desktop cameras are often difficult to position correctly.',
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        context.router.push(const QRScannerRoute());
+                      },
+                      child: const Text('Try Anyway'),
+                    ),
+                  ],
+                ),
+              );
+            },
+            icon: const Icon(Icons.qr_code_scanner),
+            tooltip: 'Scan Book',
+          ),
+        ],
+      ),
       body: Row(
         children: [
           // Sidebar: Search History

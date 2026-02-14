@@ -6,18 +6,21 @@ import '../../domain/usecases/search_books_usecase.dart';
 import '../../domain/usecases/get_search_history_usecase.dart';
 import '../../domain/usecases/save_search_history_usecase.dart';
 import '../../domain/usecases/clear_search_history_usecase.dart';
+import '../../domain/usecases/search_books_by_isbn_usecase.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final SearchBooksUseCase searchBooksUseCase;
+  final SearchBooksByISBNUseCase searchBooksByISBNUseCase;
   final GetSearchHistoryUseCase getSearchHistoryUseCase;
   final SaveSearchHistoryUseCase saveSearchHistoryUseCase;
   final ClearSearchHistoryUseCase clearSearchHistoryUseCase;
 
   HomeBloc({
     required this.searchBooksUseCase,
+    required this.searchBooksByISBNUseCase,
     required this.getSearchHistoryUseCase,
     required this.saveSearchHistoryUseCase,
     required this.clearSearchHistoryUseCase,
@@ -26,6 +29,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<SearchBooksEvent>(_onSearchBooks);
     on<ClearSearchHistoryEvent>(_onClearSearchHistory);
     on<ToggleViewModeEvent>(_onToggleViewMode);
+    on<QRCodeScannedEvent>(_onQRCodeScanned);
   }
 
   Future<void> _onLoadSearchHistory(
@@ -132,4 +136,55 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
+  Future<void> _onQRCodeScanned(
+    QRCodeScannedEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    final scannedValue = event.isbn.trim();
+    log('HomeBloc: QRCodeScannedEvent received with: "$scannedValue"');
+
+    emit(
+      HomeLoading(viewMode: state.viewMode, searchHistory: state.searchHistory),
+    );
+
+    try {
+      List<Book> books;
+      // ISBN-10 or ISBN-13 check: Numeric and length 10 or 13
+      final isIsbn =
+          RegExp(r'^[0-9]+$').hasMatch(scannedValue) &&
+          (scannedValue.length == 10 || scannedValue.length == 13);
+
+      if (isIsbn) {
+        log(
+          'HomeBloc: Identified as ISBN. Searching using "isbn:" qualifier...',
+        );
+        books = await searchBooksByISBNUseCase.execute(scannedValue);
+      } else {
+        log('HomeBloc: Identified as Text. Searching as regular query...');
+        books = await searchBooksUseCase.execute(scannedValue);
+      }
+
+      // Also save to history
+      await saveSearchHistoryUseCase.execute('Scan: $scannedValue');
+      final history = await getSearchHistoryUseCase.execute();
+
+      log('HomeBloc: Search completed. Found ${books.length} books.');
+      emit(
+        HomeSuccess(
+          books: books,
+          viewMode: state.viewMode,
+          searchHistory: history,
+        ),
+      );
+    } catch (e) {
+      log('HomeBloc: QR Search Error: $e');
+      emit(
+        HomeFailure(
+          message: e.toString(),
+          viewMode: state.viewMode,
+          searchHistory: state.searchHistory,
+        ),
+      );
+    }
+  }
 }

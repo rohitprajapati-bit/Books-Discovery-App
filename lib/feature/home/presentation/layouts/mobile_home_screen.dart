@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:books_discovery_app/core/router/routes.gr.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:books_discovery_app/feature/home/presentation/bloc/home_bloc.dart';
 import 'package:books_discovery_app/feature/home/presentation/widgets/search_bar_widget.dart';
@@ -76,6 +78,13 @@ class MobileHomeScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          context.router.push(const QRScannerRoute());
+        },
+        icon: const Icon(Icons.qr_code_scanner),
+        label: const Text('Scan Book'),
       ),
     );
   }

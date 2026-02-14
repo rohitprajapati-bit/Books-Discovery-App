@@ -19,14 +19,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          GetIt.instance<HomeBloc>()..add(LoadSearchHistoryEvent()),
-      child: const ResponsiveLayout(
-        mobileBody: MobileHomeScreen(),
-        tabletBody: TabletHomeScreen(),
-        desktopBody: DesktopHomeScreen(),
-      ),
+    return const ResponsiveLayout(
+      mobileBody: MobileHomeScreen(),
+      tabletBody: TabletHomeScreen(),
+      desktopBody: DesktopHomeScreen(),
     );
   }
 }
