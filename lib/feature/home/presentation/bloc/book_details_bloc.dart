@@ -4,7 +4,6 @@ import '../../domain/usecases/generate_ai_summary_usecase.dart';
 import '../../domain/usecases/get_ai_recommendations_usecase.dart';
 import 'book_details_event.dart';
 import 'book_details_state.dart';
-import 'dart:developer';
 
 class BookDetailsBloc extends Bloc<BookDetailsEvent, BookDetailsState> {
   final GetBooksByAuthorUseCase getBooksByAuthorUseCase;
@@ -25,7 +24,6 @@ class BookDetailsBloc extends Bloc<BookDetailsEvent, BookDetailsState> {
     Emitter<BookDetailsState> emit,
   ) async {
     emit(BookDetailsLoading());
-    log('BookDetailsBloc: Loading details for "${event.book.title}"');
 
     try {
       // Run fetching in parallel
@@ -46,7 +44,6 @@ class BookDetailsBloc extends Bloc<BookDetailsEvent, BookDetailsState> {
           .toList();
       final List<String> recommendations = results[2] as List<String>;
 
-      log('BookDetailsBloc: Loaded successfully');
       emit(
         BookDetailsLoaded(
           aiSummary: summary,
@@ -55,7 +52,6 @@ class BookDetailsBloc extends Bloc<BookDetailsEvent, BookDetailsState> {
         ),
       );
     } catch (e) {
-      log('BookDetailsBloc Error: $e');
       emit(BookDetailsError(e.toString()));
     }
   }
@@ -76,9 +72,7 @@ class BookDetailsBloc extends Bloc<BookDetailsEvent, BookDetailsState> {
             aiRecommendations: currentState.aiRecommendations,
           ),
         );
-      } catch (e) {
-        log('BookDetailsBloc Refresh Error: $e');
-      }
+      } catch (e) {}
     }
   }
 }

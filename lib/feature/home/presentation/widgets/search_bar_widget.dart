@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:books_discovery_app/feature/auth/presentation/bloc/auth_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,12 +22,9 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   }
 
   void _onSearch(String userId) {
-    log('SearchBarWidget: _onSearch called with value: ${_controller.text}');
     if (_controller.text.isNotEmpty) {
       context.read<HomeBloc>().add(SearchBooksEvent(_controller.text, userId));
-    } else {
-      log('SearchBarWidget: Search query is empty');
-    }
+    } else {}
   }
 
   Future<void> _onPickImage(String userId) async {
@@ -64,7 +61,6 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
       );
 
       if (image != null && mounted) {
-        log('SearchBarWidget: Image picked: ${image.path}');
         context.read<HomeBloc>().add(
           OCRSearchRequestedEvent(image.path, userId),
         );

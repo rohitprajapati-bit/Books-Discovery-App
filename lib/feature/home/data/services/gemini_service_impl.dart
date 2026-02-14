@@ -1,7 +1,6 @@
 import 'package:google_generative_ai/google_generative_ai.dart';
 import '../../domain/entities/book.dart';
 import '../../domain/services/ai_service.dart';
-import 'dart:developer';
 
 class GeminiServiceImpl implements AIService {
   final String apiKey;
@@ -13,7 +12,6 @@ class GeminiServiceImpl implements AIService {
 
   @override
   Future<String> generateBookSummary(Book book) async {
-    log('Gemini: Generating summary for "${book.title}"');
     final prompt =
         'Summarize the book "${book.title}" by ${book.authors.join(', ')} in a concise, engaging, and easy-to-read paragraph (max 150 words). Avoid spoilers. Use its description for context: ${book.description ?? 'No description available'}.';
 
@@ -22,15 +20,11 @@ class GeminiServiceImpl implements AIService {
       final response = await _model.generateContent(content);
 
       if (response.text == null) {
-        log(
-          'Gemini: Response text is null. Finish reason: ${response.candidates.first.finishReason}',
-        );
         return 'Summary could not be generated (it might have been blocked or empty).';
       }
 
       return response.text!;
     } catch (e) {
-      log('Gemini Summary Detailed Error: $e');
       if (e.toString().contains('403') || e.toString().contains('permission')) {
         return 'AI Summary: Access denied. Please check your API key permissions/billing.';
       }
@@ -40,7 +34,6 @@ class GeminiServiceImpl implements AIService {
 
   @override
   Future<List<String>> getPersonalizedRecommendations(Book book) async {
-    log('Gemini: Getting recommendations for "${book.title}"');
     final prompt =
         'Based on the book "${book.title}" by ${book.authors.join(', ')} (Category: ${book.categories?.join(', ') ?? 'General'}), recommend 5 similar book titles. Return ONLY a JSON array of strings, e.g., ["Book 1", "Book 2"]. Do not include markdown formatting like ```json or ```.';
 
@@ -50,7 +43,6 @@ class GeminiServiceImpl implements AIService {
       var text = response.text;
 
       if (text == null || text.isEmpty) {
-        log('Gemini Recommendations: Response text is null or empty.');
         return [];
       }
 
@@ -81,7 +73,6 @@ class GeminiServiceImpl implements AIService {
           )
           .toList();
     } catch (e) {
-      log('Gemini Recommendations Detailed Error: $e');
       return [];
     }
   }

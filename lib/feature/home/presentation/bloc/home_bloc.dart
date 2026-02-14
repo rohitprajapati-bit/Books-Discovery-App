@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import '../../domain/entities/book.dart';
 import '../../domain/usecases/search_books_usecase.dart';
@@ -50,7 +50,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     SearchBooksEvent event,
     Emitter<HomeState> emit,
   ) async {
-    log('HomeBloc: SearchBooksEvent received with query: ${event.query}');
     if (event.query.trim().isEmpty) return;
 
     emit(
@@ -58,14 +57,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
 
     try {
-      log('HomeBloc: Saving search history...');
       await saveSearchHistoryUseCase.execute(event.userId, event.query);
       final history = await getSearchHistoryUseCase.execute(event.userId);
 
-      log('HomeBloc: Calling searchBooksUseCase...');
       final books = await searchBooksUseCase.execute(event.query, event.userId);
 
-      log('HomeBloc: Search success, found ${books.length} books');
       emit(
         HomeSuccess(
           books: books,
@@ -74,7 +70,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         ),
       );
     } catch (e) {
-      log('HomeBloc: Search error: $e');
       emit(
         HomeFailure(
           message: e.toString(),
@@ -147,7 +142,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) async {
     final scannedValue = event.isbn.trim();
-    log('HomeBloc: QRCodeScannedEvent received with: "$scannedValue"');
 
     emit(
       HomeLoading(viewMode: state.viewMode, searchHistory: state.searchHistory),
@@ -161,15 +155,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           (scannedValue.length == 10 || scannedValue.length == 13);
 
       if (isIsbn) {
-        log(
-          'HomeBloc: Identified as ISBN. Searching using "isbn:" qualifier...',
-        );
         books = await searchBooksByISBNUseCase.execute(
           scannedValue,
           event.userId,
         );
       } else {
-        log('HomeBloc: Identified as Text. Searching as regular query...');
         books = await searchBooksUseCase.execute(scannedValue, event.userId);
       }
 
@@ -180,7 +170,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       );
       final history = await getSearchHistoryUseCase.execute(event.userId);
 
-      log('HomeBloc: Search completed. Found ${books.length} books.');
       emit(
         HomeSuccess(
           books: books,
@@ -189,7 +178,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         ),
       );
     } catch (e) {
-      log('HomeBloc: QR Search Error: $e');
       emit(
         HomeFailure(
           message: e.toString(),
@@ -204,17 +192,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     OCRSearchRequestedEvent event,
     Emitter<HomeState> emit,
   ) async {
-    log(
-      'HomeBloc: OCRSearchRequestedEvent received with path: ${event.imagePath}',
-    );
-
     emit(
       HomeLoading(viewMode: state.viewMode, searchHistory: state.searchHistory),
     );
 
     try {
       final imageFile = File(event.imagePath);
-      log('HomeBloc: Extracting detailed text from image...');
+
       final detailedResults = await extractTextUseCase.executeDetailed(
         imageFile,
       );
@@ -261,10 +245,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       // Fallback to the largest line if everything was filtered
       titleCandidate ??= detailedResults.first['text'];
 
-      log(
-        'HomeBloc: Most prominent non-noise text (Title Candidate): "$titleCandidate"',
-      );
-
       // Also grab the next prominent line (likely the author or subtitle) for context
       String query = titleCandidate!;
       if (detailedResults.length > 1) {
@@ -286,13 +266,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         }
       }
 
-      log('HomeBloc: Searching for: "$query"');
       final books = await searchBooksUseCase.execute(query, event.userId);
 
       await saveSearchHistoryUseCase.execute(event.userId, 'OCR: $query');
       final history = await getSearchHistoryUseCase.execute(event.userId);
 
-      log('HomeBloc: OCR Search success, found ${books.length} books');
       emit(
         HomeSuccess(
           books: books,
@@ -301,7 +279,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         ),
       );
     } catch (e) {
-      log('HomeBloc: OCR Search error: $e');
       emit(
         HomeFailure(
           message: "OCR Error: ${e.toString()}",

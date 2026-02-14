@@ -1,4 +1,3 @@
-import 'dart:developer' as dev;
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,14 +52,10 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   Future<void> _pickImage() async {
-    dev.log('Initiating image picker...', name: 'ProfilePage');
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
-      dev.log('Image picked: ${image.path}', name: 'ProfilePage');
       _profileBloc.add(UpdateProfilePictureRequested(image.path));
-    } else {
-      dev.log('No image picked', name: 'ProfilePage');
-    }
+    } else {}
   }
 
   void _onEditName(String newName) {
@@ -79,10 +74,7 @@ class _ProfilePageState extends State<ProfilePage>
         appBar: AppBar(title: const Text('My Profile'), centerTitle: true),
         body: BlocListener<ProfileBloc, ProfileState>(
           listener: (context, state) {
-            dev.log('ProfileBloc state changed: $state', name: 'ProfilePage');
-            if (state is ProfileLoading) {
-              dev.log('Show loading state...', name: 'ProfilePage');
-            }
+            if (state is ProfileLoading) {}
             if (state is ProfileUpdateSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Profile updated successfully!')),

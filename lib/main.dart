@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'dart:developer';
+
 import 'core/bloc/app_bloc_observer.dart';
 
 import 'core/di/injection_container.dart';
@@ -24,8 +24,6 @@ void main() async {
 
   // Initialize all dependencies using GetIt
   await initializeDependencies();
-
-  log('Dependencies initialized successfully');
 
   Bloc.observer = AppBlocObserver();
 

@@ -1,6 +1,6 @@
 import '../../../../core/network/dio_client.dart';
 import '../../../../core/error/exceptions.dart';
-import 'dart:developer';
+
 import '../models/book_model.dart';
 
 abstract class BookRemoteDataSource {
@@ -16,20 +16,15 @@ class BookRemoteDataSourceImpl implements BookRemoteDataSource {
 
   @override
   Future<List<BookModel>> searchBooks(String query) async {
-    log('Searching for: $query');
     try {
       final response = await dioClient.get(
         'volumes',
         queryParameters: {'q': query},
       );
 
-      log('API Response Code: ${response.statusCode}');
-
       if (response.statusCode == 200) {
         final data = response.data as Map<String, dynamic>;
         final items = data['items'] as List<dynamic>?;
-
-        log('Items found: ${items?.length ?? 0}');
 
         if (items == null) return [];
 
@@ -40,7 +35,6 @@ class BookRemoteDataSourceImpl implements BookRemoteDataSource {
         );
       }
     } catch (e) {
-      log('Search Catch Error: $e');
       throw ServerException(
         message: 'Failed to search books. Please check your connection.',
         code: e.toString(),

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import '../../../../utils/responsive_layout.dart';
@@ -13,7 +11,6 @@ class SignupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log('bild');
     return const ResponsiveLayout(
       mobileBody: MobileSignupScreen(),
       tabletBody: TabletSignupScreen(),
