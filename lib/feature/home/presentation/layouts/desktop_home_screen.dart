@@ -7,6 +7,7 @@ import 'package:books_discovery_app/feature/home/presentation/widgets/search_bar
 import 'package:books_discovery_app/feature/home/presentation/widgets/search_history_widget.dart';
 import 'package:books_discovery_app/feature/home/presentation/widgets/book_list_widget.dart';
 import 'package:books_discovery_app/feature/home/presentation/widgets/book_grid_widget.dart';
+import '../widgets/home_empty_state_widget.dart';
 
 class DesktopHomeScreen extends StatelessWidget {
   const DesktopHomeScreen({super.key});
@@ -75,24 +76,45 @@ class DesktopHomeScreen extends StatelessWidget {
                 Expanded(
                   child: BlocBuilder<HomeBloc, HomeState>(
                     builder: (context, state) {
+                      Widget content;
                       if (state is HomeLoading) {
-                        return const Center(child: CircularProgressIndicator());
+                        content = const Center(
+                          key: ValueKey('loading'),
+                          child: CircularProgressIndicator(),
+                        );
                       } else if (state is HomeSuccess) {
-                        return state.viewMode == HomeViewMode.list
-                            ? BookListWidget(books: state.books)
+                        content = state.viewMode == HomeViewMode.list
+                            ? BookListWidget(
+                                key: const ValueKey('list'),
+                                books: state.books,
+                              )
                             : BookGridWidget(
+                                key: const ValueKey('grid'),
                                 books: state.books,
                                 crossAxisCount: 4,
                               );
                       } else if (state is HomeFailure) {
-                        return Center(child: Text('Error: ${state.message}'));
+                        content = Center(
+                          key: const ValueKey('error'),
+                          child: Text('Error: ${state.message}'),
+                        );
+                      } else {
+                        content = const Center(
+                          key: ValueKey('empty'),
+                          child: HomeEmptyStateWidget(),
+                        );
                       }
 
-                      return const Center(
-                        child: Text(
-                          'Use the search bar above to discover new books.',
-                          style: TextStyle(fontSize: 18, color: Colors.grey),
-                        ),
+                      return AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        transitionBuilder:
+                            (Widget child, Animation<double> animation) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                        child: content,
                       );
                     },
                   ),

@@ -1,88 +1,121 @@
 # Books Discovery App
 
-A modern Flutter application for discovering, tracking, and analyzing books. Features real-time search, AI-powered recommendations, and detailed reading analytics.
+A Flutter-based application for discovering books, featuring real-time trends, AI-powered insights, and comprehensive analytics.
 
-## 📱 Screenshots
+![App Banner](screenshots/banner.png)
 
-| Home Tab | Search Tab | Analytics Tab | Profile Tab |
-|:---:|:---:|:---:|:---:|
-| ![Home Tab](assets/screenshots/home_tab.png) | ![Search Tab](assets/screenshots/search_tab.png) | ![Analytics Tab](assets/screenshots/analytics_tab.png) | ![Profile Tab](assets/screenshots/profile_tab.png) |
+## Features
 
-*(Note: Add screenshots to `assets/screenshots/` folder)*
+- **Book Discovery**: Search for books by title, author, or ISBN.
+- **Real-time Trends**: View live trending books with sales updates via WebSocket.
+- **AI Integration**: Get AI-generated summaries and recommendations using Gemini API.
+- **Analytics**: Visualize your search history and reading interests.
+- **Multi-Platform**: Responsive design for Mobile, Tablet, and Desktop.
 
-## 🔍 Search Mechanisms
+---
 
-The app employs a multi-modal search system to find books effectively:
+## Screenshots
 
-### 1. Text Search
-Standard keyword search querying the Google Books API. Results are cached locally for quick access.
+| Home (Mobile) | Home (Tablet) | Analytics |
+|:---:|:---:|:---:|
+| ![Home Mobile](screenshots/home_mobile.png) | ![Home Tablet](screenshots/home_tablet.png) | ![Analytics](screenshots/analytics.png) |
 
-### 2. QR & Barcode Scanner
-- **Implementation**: Uses `mobile_scanner` to detect codes.
-- **Logic**: 
-  - Scans for 10-digit or 13-digit ISBNs.
-  - Automatically discriminates between ISBNs and general text.
-  - Triggers a specific ISBN search (`isbn:<number>`) for precise matches.
+| Book Details | QR Scanner | Dark Mode |
+|:---:|:---:|:---:|
+| ![Details](screenshots/details.png) | ![Scanner](screenshots/scanner.png) | ![Dark Mode](screenshots/dark_mode.png) |
 
-### 3. OCR (Optical Character Recognition)
-- **Engine**: Google ML Kit Text Recognition (`google_mlkit_text_recognition`).
-- **Workflow**:
-  1. **Capture**: User takes a photo of a book cover.
-  2. **Extraction**: ML Kit extracts all visible text blocks.
-  3. **Filtering**: The app filters out common "noise" phrases (e.g., "New York Times Bestseller", "Edition").
-  4. **Selection**: The largest remaining text block is identified as the likely **Title**.
-  5. **Context**: Secondary distinct text blocks are added as **Author** context to refine the search.
-  6. **Action**: Performs a search query with the extracted metadata.
+---
 
-## 📊 Analytics Logic
+## Search Mechanisms
 
-Insights are generated locally on the device to ensure privacy and speed.
+The app supports multiple ways to find books:
 
-- **Data Source**: The app maintains a local database of your interactions (viewed books, search history) using `GetCachedBooksUseCase`.
-- **Processing**:
-  - **Genre Distribution**: Calculates the frequency of book categories from your history.
-  - **Publishing Trends**: Parses `publishedDate` to group books by release decades (e.g., 2020s, 1990s, Classics).
-- **Visualization**: Data is fed into the `AnalyticsBloc`, which computes these statistics on-the-fly for real-time charting.
+1.  **Text Search**: Standard text input to query the Google Books API.
+2.  **QR/Barcode Scanner**:
+    - Uses `mobile_scanner` to detect ISBNs from barcodes.
+    - Automatically triggers a search upon successful detection.
+3.  **OCR (Optical Character Recognition)**:
+    - Uses `google_mlkit_text_recognition` to extract text from images (e.g., book covers).
+    - Extracted text is populated into the search bar for easy querying.
 
-## 🔌 WebSocket Integration (Trending Books)
+---
 
-The "Trending Now" section simulates a live data feed to demonstrate real-time updates.
+## Analytics Logic
+
+We track user search behavior to provide personalized insights.
+
+**Data Flow:**
+1.  **Local Storage**: Every successful search is saved locally using `SharedPreferences` (via `SearchHistoryRepository`).
+2.  **Processing**: `AnalyticsBloc` retrieves this history and calculates:
+    - **Top Search Terms**: Frequency analysis of search queries.
+    - **Genre Distribution**: Categorization of viewed books (mocked or derived from API data).
+    - **Publishing Trends**: Analysis of publication years.
+3.  **Visualization**: Data is presented using `fl_chart` for graphs and custom widgets for lists.
+
+---
+
+## WebSocket Integration
+
+Real-time features are powered by a WebSocket connection (currently simulated).
 
 - **Service**: `TrendingSocketService`
-- **Behavior**: a `StreamController` emits a new list of trending books every 5 seconds.
-- **Simulation**: In the current version, this mocks a WebSocket connection by shuffling and broadcasting a curated list of popular titles (e.g., "Atomic Habits", "Project Hail Mary") with dynamic "trend scores".
+- **Functionality**:
+    - Establishes a stream of `TrendingBook` updates.
+    - Emits updates every few seconds with changing "Sales" numbers and "Trend Scores".
+- **UI Updates**: The `HomeBloc` and `AnalyticsBloc` listen to this stream and update the UI instantaneously, showing live "Up/Down" indicators.
 
-## 🤖 Gemini AI Integration
+---
 
-Powered by Google's Gemini Pro model via `google_generative_ai`.
+## Gemini AI Usage
 
-- **Book Summaries**: Generates concise, engaging 150-word summaries for books that lack detailed descriptions.
-  - *Prompt*: "Summarize [Title] by [Author]..."
-- **Personalized Recommendations**: Analyzes the current book's category and author to suggest 5 similar titles.
-  - *Prompt*: "Based on [Title]... recommend 5 similar book titles."
-- **Privacy**: No user personal data is sent; only book metadata is used for generation.
+We leverage Google's **Gemini Pro** model for enhanced content.
 
-## 🔥 Firebase Setup
+- **Summaries**:
+    - When a user views a book, a prompt is sent to Gemini: *"Summarize [Book Title] by [Author]..."*
+    - The response is streamed or displayed as a concise paragraph.
+- **Recommendations**:
+    - Contextual recommendations are generated based on the currently viewed book.
+    - Prompt: *"Recommend 5 books similar to [Book Title]..."*
+- **Privacy**: No personal user data is sent to Gemini; only book metadata is used for context.
 
-The app uses Firebase for secure Authentication and backend services.
+---
 
-- **Configuration**: Uses `flutterfire configure` to generate `firebase_options.dart`.
+## Firebase Setup
+
+The app uses Firebase for Authentication and User Data.
+
+**Configuration:**
+- **Auth**: Email/Password and Google Sign-In.
+- **Firestore**: Stores user profiles and potential cloud-synced settings.
 - **Security**:
-  - Api Keys and secrets are **NOT** stored in the codebase or version control. calls are made using the generated options file which should be excluded from public repositories.
-  - **Authentication**: Supports Email/Password and Google Sign-In via `AuthBloc`.
-  - **Firestore**: (Planned/Implemented) for syncing user profiles and remote history.
+    - `google-services.json` (Android) and `GoogleService-Info.plist` (iOS) are required but **NOT** included in the repo for security.
+    - API Keys are managed via environment variables or secure config files.
 
-## 🚀 Getting Started
+**To run this project:**
+1.  Create a Firebase project.
+2.  Add Android/iOS apps in the Firebase Console.
+3.  Download configuration files and place them in `android/app/` and `ios/Runner/`.
+4.  Enable Auth and Firestore services.
 
-1. **Prerequisites**: Flutter SDK `3.x`, Dart `3.x`.
-2. **Setup**:
-   ```bash
-   flutter pub get
-   ```
-3. **Environment**:
-   - Create a `.env` file (if applicable) or ensure `firebase_options.dart` is present.
-   - Add your Gemini API Key in `lib/core/constants/api_constants.dart` or `.env`.
-4. **Run**:
-   ```bash
-   flutter run
-   ```
+---
+
+## Getting Started
+
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/rohitprajapati-bit/Books-Discovery-App.git
+    ```
+2.  **Install dependencies**:
+    ```bash
+    flutter pub get
+    ```
+3.  **Run the app**:
+    ```bash
+    flutter run
+    ```
+
+---
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request.

@@ -11,6 +11,7 @@ import 'package:books_discovery_app/feature/home/presentation/widgets/search_his
 import 'package:books_discovery_app/feature/home/presentation/widgets/book_list_widget.dart';
 import 'package:books_discovery_app/feature/home/presentation/widgets/book_grid_widget.dart';
 import 'package:books_discovery_app/feature/analytics/presentation/widgets/trending_books_section.dart';
+import '../widgets/home_empty_state_widget.dart';
 
 class MobileHomeScreen extends StatelessWidget {
   const MobileHomeScreen({super.key});
@@ -26,14 +27,19 @@ class MobileHomeScreen extends StatelessWidget {
           Expanded(
             child: BlocBuilder<HomeBloc, HomeState>(
               builder: (context, homeState) {
+                Widget content;
                 if (homeState is HomeLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  content = const Center(
+                    key: ValueKey('loading'),
+                    child: CircularProgressIndicator(),
+                  );
                 } else if (homeState is HomeSuccess) {
-                  return homeState.viewMode == HomeViewMode.list
-                      ? BookListWidget(books: homeState.books)
-                      : BookGridWidget(books: homeState.books);
+                  content = homeState.viewMode == HomeViewMode.list
+                      ? BookListWidget(key: const ValueKey('list'), books: homeState.books)
+                      : BookGridWidget(key: const ValueKey('grid'), books: homeState.books);
                 } else if (homeState is HomeFailure) {
-                  return Center(
+                  content = Center(
+                    key: const ValueKey('error'),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -48,43 +54,16 @@ class MobileHomeScreen extends StatelessWidget {
                       ],
                     ),
                   );
+                } else {
+                  content = const HomeEmptyStateWidget(key: ValueKey('empty'));
                 }
 
-                // Empty State: Show Trending Books + Lottie Animation
-                return SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0, top: 16.0),
-                        child: BlocBuilder<AnalyticsBloc, AnalyticsState>(
-                          builder: (context, analyticsState) {
-                            if (analyticsState is AnalyticsLoaded &&
-                                analyticsState.trendingBooks.isNotEmpty) {
-                              return TrendingBooksSection(
-                                trending: analyticsState.trendingBooks,
-                              );
-                            }
-                            return const SizedBox.shrink();
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Lottie.network(
-                        'https://assets5.lottiefiles.com/packages/lf20_tmsiddoc.json', // Reading/Books animation
-                        height: 200,
-                        errorBuilder: (context, error, stackTrace) => Icon(
-                          Icons.library_books,
-                          size: 100,
-                          color: Colors.grey[300],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'Search for your favorite books!',
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
-                      ),
-                    ],
-                  ),
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (Widget child, Animation<double> animation) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+                  child: content,
                 );
               },
             ),

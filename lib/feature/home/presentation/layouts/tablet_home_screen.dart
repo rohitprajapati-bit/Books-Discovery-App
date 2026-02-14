@@ -8,6 +8,8 @@ import 'package:books_discovery_app/feature/home/presentation/widgets/search_his
 import 'package:books_discovery_app/feature/home/presentation/widgets/book_list_widget.dart';
 import 'package:books_discovery_app/feature/home/presentation/widgets/book_grid_widget.dart';
 
+import '../widgets/home_empty_state_widget.dart';
+
 class TabletHomeScreen extends StatelessWidget {
   const TabletHomeScreen({super.key});
 
@@ -29,12 +31,12 @@ class TabletHomeScreen extends StatelessWidget {
       body: Row(
         children: [
           // Left side: Search and History
-          Expanded(
+          const Expanded(
             flex: 2,
             child: Column(
               children: [
-                const SearchBarWidget(),
-                const Expanded(child: SearchHistoryWidget()),
+                SearchBarWidget(),
+                Expanded(child: SearchHistoryWidget()),
               ],
             ),
           ),
@@ -44,18 +46,42 @@ class TabletHomeScreen extends StatelessWidget {
             flex: 3,
             child: BlocBuilder<HomeBloc, HomeState>(
               builder: (context, state) {
+                Widget content;
                 if (state is HomeLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  content = const Center(
+                    key: ValueKey('loading'),
+                    child: CircularProgressIndicator(),
+                  );
                 } else if (state is HomeSuccess) {
-                  return state.viewMode == HomeViewMode.list
-                      ? BookListWidget(books: state.books)
-                      : BookGridWidget(books: state.books, crossAxisCount: 3);
+                  content = state.viewMode == HomeViewMode.list
+                      ? BookListWidget(
+                          key: const ValueKey('list'),
+                          books: state.books,
+                        )
+                      : BookGridWidget(
+                          key: const ValueKey('grid'),
+                          books: state.books,
+                          crossAxisCount: 3,
+                        );
                 } else if (state is HomeFailure) {
-                  return Center(child: Text('Error: ${state.message}'));
+                  content = Center(
+                    key: const ValueKey('error'),
+                    child: Text('Error: ${state.message}'),
+                  );
+                } else {
+                  content = const Center(
+                    key: ValueKey('empty'),
+                    child: HomeEmptyStateWidget(),
+                  );
                 }
 
-                return const Center(
-                  child: Text('Search for books to see results here.'),
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
+                  child: content,
                 );
               },
             ),
