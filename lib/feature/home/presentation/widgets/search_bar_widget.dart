@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import '../bloc/home_bloc.dart';
 
 class SearchBarWidget extends StatefulWidget {
@@ -28,6 +29,46 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     }
   }
 
+  Future<void> _onPickImage() async {
+    final picker = ImagePicker();
+
+    // Show dialog to choose source
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Take a photo'),
+              onTap: () => Navigator.pop(context, ImageSource.camera),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Choose from gallery'),
+              onTap: () => Navigator.pop(context, ImageSource.gallery),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (source != null) {
+      final XFile? image = await picker.pickImage(
+        source: source,
+        maxWidth: 1000,
+        maxHeight: 1000,
+        imageQuality: 85,
+      );
+
+      if (image != null && mounted) {
+        log('SearchBarWidget: Image picked: ${image.path}');
+        context.read<HomeBloc>().add(OCRSearchRequestedEvent(image.path));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -52,6 +93,13 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                           });
                         },
                       ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.photo_camera,
+                        color: Colors.blueAccent,
+                      ),
+                      onPressed: _onPickImage,
+                    ),
                     IconButton(
                       icon: const Icon(Icons.search, color: Colors.blueAccent),
                       onPressed: _onSearch,

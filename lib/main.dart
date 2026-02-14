@@ -12,6 +12,7 @@ import 'feature/auth/presentation/bloc/auth_bloc.dart';
 import 'feature/auth/presentation/login/bloc/login_bloc.dart';
 import 'feature/auth/presentation/register/bloc/register_bloc.dart';
 import 'feature/home/presentation/bloc/home_bloc.dart';
+import 'feature/home/presentation/bloc/book_details_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,6 +50,10 @@ class MyApp extends StatelessWidget {
         // Global Home BLoC - Factory from GetIt (initialized with history)
         BlocProvider<HomeBloc>(
           create: (context) => sl<HomeBloc>()..add(LoadSearchHistoryEvent()),
+        ),
+        // Book Details BLoC - Factory from GetIt
+        BlocProvider<BookDetailsBloc>(
+          create: (context) => sl<BookDetailsBloc>(),
         ),
       ],
       child: BlocListener<AuthBloc, AuthState>(

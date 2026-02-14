@@ -44,22 +44,27 @@ class BookGridWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(12),
+                  child: Hero(
+                    tag: 'book-image-${book.id}',
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(12),
+                      ),
+                      child: book.thumbnailUrl != null
+                          ? Image.network(
+                              book.thumbnailUrl!.replaceFirst(
+                                'http://',
+                                'https://',
+                              ),
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Center(
+                                    child: Icon(Icons.book, size: 50),
+                                  ),
+                            )
+                          : const Center(child: Icon(Icons.book, size: 50)),
                     ),
-                    child: book.thumbnailUrl != null
-                        ? Image.network(
-                            book.thumbnailUrl!.replaceFirst(
-                              'http://',
-                              'https://',
-                            ),
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                const Center(child: Icon(Icons.book, size: 50)),
-                          )
-                        : const Center(child: Icon(Icons.book, size: 50)),
                   ),
                 ),
                 Padding(

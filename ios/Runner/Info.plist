@@ -46,6 +46,15 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>We need camera access to scan QR codes on books</string>
+	<string>We need camera access to scan QR codes and capture book covers for OCR search.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need photo library access to upload book cover images for OCR search.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need microphone access for library dependencies (optional for OCR).</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>https</string>
+		<string>http</string>
+	</array>
 </dict>
 </plist>

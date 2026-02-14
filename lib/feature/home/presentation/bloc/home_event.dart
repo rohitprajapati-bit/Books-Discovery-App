@@ -30,3 +30,10 @@ class QRCodeScannedEvent extends HomeEvent {
   @override
   List<Object> get props => [isbn];
 }
+
+class OCRSearchRequestedEvent extends HomeEvent {
+  final String imagePath;
+  const OCRSearchRequestedEvent(this.imagePath);
+  @override
+  List<Object> get props => [imagePath];
+}

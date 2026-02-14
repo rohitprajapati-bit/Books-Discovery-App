@@ -5,6 +5,7 @@ import '../models/book_model.dart';
 abstract class BookRemoteDataSource {
   Future<List<BookModel>> searchBooks(String query);
   Future<List<BookModel>> searchBooksByISBN(String isbn);
+  Future<List<BookModel>> searchBooksByAuthor(String author);
 }
 
 class BookRemoteDataSourceImpl implements BookRemoteDataSource {
@@ -44,5 +45,10 @@ class BookRemoteDataSourceImpl implements BookRemoteDataSource {
   @override
   Future<List<BookModel>> searchBooksByISBN(String isbn) async {
     return searchBooks('isbn:$isbn');
+  }
+
+  @override
+  Future<List<BookModel>> searchBooksByAuthor(String author) async {
+    return searchBooks('inauthor:"$author"');
   }
 }

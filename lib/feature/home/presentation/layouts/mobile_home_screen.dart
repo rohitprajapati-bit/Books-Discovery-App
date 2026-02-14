@@ -17,14 +17,14 @@ class MobileHomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Book Discovery'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              context.read<AuthBloc>().add(AuthLogoutRequested());
-            },
-            icon: const Icon(Icons.logout),
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {
+        //       context.read<AuthBloc>().add(AuthLogoutRequested());
+        //     },
+        //     icon: const Icon(Icons.logout),
+        //   ),
+        // ],
       ),
       body: Column(
         children: [

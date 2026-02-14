@@ -27,18 +27,21 @@ class BookListWidget extends StatelessWidget {
           ),
           child: ListTile(
             contentPadding: const EdgeInsets.all(8),
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: book.thumbnailUrl != null
-                  ? Image.network(
-                      book.thumbnailUrl!.replaceFirst('http://', 'https://'),
-                      width: 50,
-                      height: 80,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.book, size: 50),
-                    )
-                  : const Icon(Icons.book, size: 50),
+            leading: Hero(
+              tag: 'book-image-${book.id}',
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: book.thumbnailUrl != null
+                    ? Image.network(
+                        book.thumbnailUrl!.replaceFirst('http://', 'https://'),
+                        width: 50,
+                        height: 80,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(Icons.book, size: 50),
+                      )
+                    : const Icon(Icons.book, size: 50),
+              ),
             ),
             title: Text(
               book.title,

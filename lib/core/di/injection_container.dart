@@ -25,7 +25,16 @@ import '../../feature/home/domain/usecases/get_search_history_usecase.dart';
 import '../../feature/home/domain/usecases/save_search_history_usecase.dart';
 import '../../feature/home/domain/usecases/search_books_usecase.dart';
 import '../../feature/home/domain/usecases/search_books_by_isbn_usecase.dart';
+import '../../feature/home/domain/usecases/extract_text_usecase.dart';
+import '../../feature/home/domain/usecases/get_books_by_author_usecase.dart';
+import '../../feature/home/domain/usecases/generate_ai_summary_usecase.dart';
+import '../../feature/home/domain/usecases/get_ai_recommendations_usecase.dart';
+import '../../feature/home/domain/services/ocr_service.dart';
+import '../../feature/home/domain/services/ai_service.dart';
+import '../../feature/home/data/services/ocr_service.dart';
+import '../../feature/home/data/services/gemini_service_impl.dart';
 import '../../feature/home/presentation/bloc/home_bloc.dart';
+import '../../feature/home/presentation/bloc/book_details_bloc.dart';
 import '../network/dio_client.dart';
 
 final sl = GetIt.instance; // sl = Service Locator
@@ -78,6 +87,12 @@ Future<void> initializeDependencies() async {
     () => BookLocalDataSourceImpl(sharedPreferences: sl()),
   );
 
+  sl.registerLazySingleton<OCRService>(() => OCRServiceImpl());
+
+  sl.registerLazySingleton<AIService>(
+    () => GeminiServiceImpl(apiKey: 'AIzaSyAsN8KoK4YE5H89GfC9lQToio9qZ4pE0u8'),
+  );
+
   // ============================================================================
   // Repositories
   // ============================================================================
@@ -105,6 +120,10 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => GetSearchHistoryUseCase(repository: sl()));
   sl.registerLazySingleton(() => SaveSearchHistoryUseCase(repository: sl()));
   sl.registerLazySingleton(() => ClearSearchHistoryUseCase(repository: sl()));
+  sl.registerLazySingleton(() => ExtractTextUseCase(sl()));
+  sl.registerLazySingleton(() => GetBooksByAuthorUseCase(sl()));
+  sl.registerLazySingleton(() => GenerateAISummaryUseCase(sl()));
+  sl.registerLazySingleton(() => GetAIRecommendationsUseCase(sl()));
 
   // ============================================================================
   // BLoCs (Factory - new instance every time)
@@ -137,6 +156,15 @@ Future<void> initializeDependencies() async {
       getSearchHistoryUseCase: sl(),
       saveSearchHistoryUseCase: sl(),
       clearSearchHistoryUseCase: sl(),
+      extractTextUseCase: sl(),
+    ),
+  );
+
+  sl.registerFactory<BookDetailsBloc>(
+    () => BookDetailsBloc(
+      getBooksByAuthorUseCase: sl(),
+      generateAISummaryUseCase: sl(),
+      getAIRecommendationsUseCase: sl(),
     ),
   );
 }
