@@ -68,7 +68,7 @@ class MobileHomeScreen extends StatelessWidget {
                           },
                         ),
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 10),
                       Lottie.network(
                         'https://assets5.lottiefiles.com/packages/lf20_tmsiddoc.json', // Reading/Books animation
                         height: 200,
@@ -78,7 +78,7 @@ class MobileHomeScreen extends StatelessWidget {
                           color: Colors.grey[300],
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 10),
                       const Text(
                         'Search for your favorite books!',
                         style: TextStyle(color: Colors.grey, fontSize: 16),

@@ -15,7 +15,7 @@ class BookListWidget extends StatelessWidget {
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 100),
       itemCount: books.length,
       itemBuilder: (context, index) {
         final book = books[index];
