@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import '../../../auth/data/models/user_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import '../../../../core/error/exceptions.dart';
 
 abstract class ProfileRemoteDataSource {
   Future<UserModel> updateProfilePicture(String filePath);
@@ -153,7 +154,8 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         name: 'ProfileRemoteDataSource',
       );
 
-      if (updatedUser == null) throw Exception('User is null after reload');
+      if (updatedUser == null)
+        throw ServerException(message: 'User is null after reload');
       return UserModel.fromFirebaseUser(updatedUser);
     } catch (e, stack) {
       dev.log(
@@ -162,7 +164,10 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         error: e,
         stackTrace: stack,
       );
-      throw Exception('Failed to update profile name: ${e.toString()}');
+      throw ServerException(
+        message: 'Failed to update profile name',
+        code: e.toString(),
+      );
     }
   }
 

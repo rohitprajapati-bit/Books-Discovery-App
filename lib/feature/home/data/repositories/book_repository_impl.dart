@@ -1,3 +1,4 @@
+import '../../../../core/error/exceptions.dart';
 import '../models/book_model.dart';
 import '../../domain/entities/book.dart';
 import '../../domain/repositories/book_repository.dart';
@@ -15,11 +16,17 @@ class BookRepositoryImpl implements BookRepository {
 
   @override
   Future<List<Book>> searchBooks(String query, {required String userId}) async {
-    final books = await remoteDataSource.searchBooks(query);
-    if (books.isNotEmpty) {
-      await cacheBooks(userId, books);
+    try {
+      final books = await remoteDataSource.searchBooks(query);
+      if (books.isNotEmpty) {
+        await cacheBooks(userId, books);
+      }
+      return books;
+    } on ServerException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception('Failed to search books');
     }
-    return books;
   }
 
   @override
@@ -27,11 +34,17 @@ class BookRepositoryImpl implements BookRepository {
     String isbn, {
     required String userId,
   }) async {
-    final books = await remoteDataSource.searchBooksByISBN(isbn);
-    if (books.isNotEmpty) {
-      await cacheBooks(userId, books);
+    try {
+      final books = await remoteDataSource.searchBooksByISBN(isbn);
+      if (books.isNotEmpty) {
+        await cacheBooks(userId, books);
+      }
+      return books;
+    } on ServerException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception('Failed to search books by ISBN');
     }
-    return books;
   }
 
   @override
@@ -39,11 +52,17 @@ class BookRepositoryImpl implements BookRepository {
     String author, {
     required String userId,
   }) async {
-    final books = await remoteDataSource.searchBooksByAuthor(author);
-    if (books.isNotEmpty) {
-      await cacheBooks(userId, books);
+    try {
+      final books = await remoteDataSource.searchBooksByAuthor(author);
+      if (books.isNotEmpty) {
+        await cacheBooks(userId, books);
+      }
+      return books;
+    } on ServerException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception('Failed to search books by Author');
     }
-    return books;
   }
 
   @override

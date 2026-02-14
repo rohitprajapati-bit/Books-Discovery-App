@@ -80,18 +80,32 @@ class TrendingBooksSection extends StatelessWidget {
                     const Spacer(),
                     Row(
                       children: [
-                        const Icon(
-                          Icons.trending_up,
+                        Icon(
+                          book.salesChange >= 0
+                              ? Icons.trending_up
+                              : Icons.trending_down,
                           size: 14,
-                          color: Colors.green,
+                          color: book.salesChange >= 0
+                              ? Colors.green
+                              : Colors.red,
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          'Trend Score: ${book.trendScore}',
-                          style: const TextStyle(
+                          '${book.salesChange >= 0 ? '+' : ''}${book.salesChange.toStringAsFixed(1)}%',
+                          style: TextStyle(
                             fontSize: 11,
-                            color: Colors.green,
+                            color: book.salesChange >= 0
+                                ? Colors.green
+                                : Colors.red,
                             fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const Spacer(),
+                        Text(
+                          'Score: ${book.trendScore}',
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.grey,
                           ),
                         ),
                       ],

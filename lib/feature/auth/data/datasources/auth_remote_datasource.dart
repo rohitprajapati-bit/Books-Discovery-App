@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../../../../core/error/exceptions.dart';
 import '../models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
@@ -47,9 +49,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       return UserModel.fromFirebaseUser(credential.user!);
     } on firebase_auth.FirebaseAuthException catch (e) {
-      throw Exception(_getErrorMessage(e.code));
+      throw AuthException(message: _getErrorMessage(e.code), code: e.code);
     } catch (e) {
-      throw Exception('Login failed: ${e.toString()}');
+      throw AuthException(
+        message: 'Login failed. Please try again.',
+        code: e.toString(),
+      );
     }
   }
 
@@ -87,9 +92,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       return UserModel.fromFirebaseUser(updatedUser);
     } on firebase_auth.FirebaseAuthException catch (e) {
-      throw Exception(_getErrorMessage(e.code));
+      throw AuthException(message: _getErrorMessage(e.code), code: e.code);
     } catch (e) {
-      throw Exception('Registration failed: ${e.toString()}');
+      throw AuthException(
+        message: 'Registration failed. Please try again.',
+        code: e.toString(),
+      );
     }
   }
 
@@ -127,9 +135,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       return UserModel.fromFirebaseUser(userCredential.user!);
     } on firebase_auth.FirebaseAuthException catch (e) {
-      throw Exception(_getErrorMessage(e.code));
+      throw AuthException(message: _getErrorMessage(e.code), code: e.code);
     } catch (e) {
-      throw Exception('Google Sign-In failed: ${e.toString()}');
+      throw AuthException(
+        message: 'Google Sign-In failed.',
+        code: e.toString(),
+      );
     }
   }
 

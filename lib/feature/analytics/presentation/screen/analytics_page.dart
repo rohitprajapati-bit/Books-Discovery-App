@@ -7,6 +7,7 @@ import '../bloc/analytics_state.dart';
 import '../layouts/mobile_analytics_screen.dart';
 import '../layouts/tablet_analytics_screen.dart';
 import '../layouts/desktop_analytics_screen.dart';
+import 'package:lottie/lottie.dart';
 
 @RoutePage()
 class AnalyticsPage extends StatelessWidget {
@@ -19,7 +20,14 @@ class AnalyticsPage extends StatelessWidget {
       body: BlocBuilder<AnalyticsBloc, AnalyticsState>(
         builder: (context, state) {
           if (state is AnalyticsLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+              child: Lottie.network(
+                'https://assets2.lottiefiles.com/packages/lf20_a2chheio.json', // Data analysis loading
+                height: 200,
+                errorBuilder: (context, e, s) =>
+                    const CircularProgressIndicator(),
+              ),
+            );
           }
 
           if (state is AnalyticsLoaded) {
@@ -48,7 +56,11 @@ class AnalyticsPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.analytics_outlined, size: 80, color: Colors.grey[400]),
+          Lottie.network(
+            'https://assets10.lottiefiles.com/packages/lf20_qpwbv5gm.json', // Empty box / no data
+            height: 250,
+            repeat: false,
+          ),
           const SizedBox(height: 16),
           const Text(
             'No search data yet',

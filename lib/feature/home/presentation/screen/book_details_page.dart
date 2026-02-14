@@ -8,6 +8,7 @@ import '../../domain/entities/book.dart';
 import '../bloc/book_details_bloc.dart';
 import '../bloc/book_details_event.dart';
 import '../bloc/book_details_state.dart';
+import 'package:lottie/lottie.dart';
 
 @RoutePage()
 class BookDetailsPage extends StatelessWidget {
@@ -142,6 +143,14 @@ class BookDetailsPage extends StatelessWidget {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.deepPurple.withValues(alpha: 0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,26 +160,41 @@ class BookDetailsPage extends StatelessWidget {
               const Icon(
                 Icons.auto_awesome,
                 color: Colors.deepPurple,
-                size: 20,
+                size: 24,
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 12),
               Text(
                 'AI Smart Summary',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Colors.deepPurple,
+                  fontSize: 18,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           BlocBuilder<BookDetailsBloc, BookDetailsState>(
             builder: (context, state) {
               if (state is BookDetailsLoading) {
-                return const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                return Center(
+                  child: Column(
+                    children: [
+                      Lottie.network(
+                        'https://assets9.lottiefiles.com/packages/lf20_p1qiuawe.json', // AI / Magic sparkle animation
+                        height: 100,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const CircularProgressIndicator(),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Generating summary...',
+                        style: TextStyle(
+                          color: Colors.deepPurple.withValues(alpha: 0.6),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
                   ),
                 );
               } else if (state is BookDetailsLoaded) {

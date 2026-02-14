@@ -5,11 +5,13 @@ class TrendingBook {
   final String title;
   final String author;
   final int trendScore;
+  final double salesChange; // Percentage change in sales
 
   TrendingBook({
     required this.title,
     required this.author,
     required this.trendScore,
+    required this.salesChange,
   });
 }
 
@@ -65,6 +67,8 @@ class TrendingSocketServiceImpl implements TrendingSocketService {
             title: _mockTitles[idx],
             author: _mockAuthors[idx],
             trendScore: 80 + random.nextInt(20),
+            // Random sales change between -5.0% and +15.0%
+            salesChange: (random.nextDouble() * 20) - 5,
           ),
         );
       }

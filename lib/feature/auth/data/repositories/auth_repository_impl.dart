@@ -1,4 +1,6 @@
 import '../../domain/entities/user.dart';
+import '../../../../core/error/exceptions.dart';
+
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_local_datasource.dart';
 import '../datasources/auth_remote_datasource.dart';
@@ -21,8 +23,10 @@ class AuthRepositoryImpl implements AuthRepository {
       );
       await localDataSource.cacheUser(user);
       return user;
+    } on AuthException catch (e) {
+      throw Exception(e.message);
     } catch (e) {
-      throw Exception(e.toString().replaceAll('Exception: ', ''));
+      throw Exception('An unexpected error occurred: ${e.toString()}');
     }
   }
 
@@ -40,8 +44,10 @@ class AuthRepositoryImpl implements AuthRepository {
       );
       await localDataSource.cacheUser(user);
       return user;
+    } on AuthException catch (e) {
+      throw Exception(e.message);
     } catch (e) {
-      throw Exception(e.toString().replaceAll('Exception: ', ''));
+      throw Exception('An unexpected error occurred: ${e.toString()}');
     }
   }
 
@@ -51,8 +57,10 @@ class AuthRepositoryImpl implements AuthRepository {
       final user = await remoteDataSource.signInWithGoogle();
       await localDataSource.cacheUser(user);
       return user;
+    } on AuthException catch (e) {
+      throw Exception(e.message);
     } catch (e) {
-      throw Exception(e.toString().replaceAll('Exception: ', ''));
+      throw Exception('An unexpected error occurred: ${e.toString()}');
     }
   }
 
@@ -62,7 +70,7 @@ class AuthRepositoryImpl implements AuthRepository {
       await remoteDataSource.logout();
       await localDataSource.clearCache();
     } catch (e) {
-      throw Exception(e.toString().replaceAll('Exception: ', ''));
+      throw Exception('Logout failed: ${e.toString()}');
     }
   }
 

@@ -1,4 +1,5 @@
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/error/exceptions.dart';
 import 'dart:developer';
 import '../models/book_model.dart';
 
@@ -34,11 +35,16 @@ class BookRemoteDataSourceImpl implements BookRemoteDataSource {
 
         return items.map((json) => BookModel.fromJson(json)).toList();
       } else {
-        throw Exception('Failed to load books: ${response.statusCode}');
+        throw ServerException(
+          message: 'Failed to load books. Status Code: ${response.statusCode}',
+        );
       }
     } catch (e) {
       log('Search Catch Error: $e');
-      throw Exception('Failed to search books: ${e.toString()}');
+      throw ServerException(
+        message: 'Failed to search books. Please check your connection.',
+        code: e.toString(),
+      );
     }
   }
 

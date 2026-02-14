@@ -2,17 +2,20 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/services/trending_socket_service.dart';
 import '../../domain/usecases/get_cached_books_usecase.dart';
+import '../../../home/domain/usecases/get_search_history_usecase.dart';
 import 'analytics_event.dart';
 import 'analytics_state.dart';
 
 class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
   final GetCachedBooksUseCase getCachedBooksUseCase;
   final TrendingSocketService trendingSocketService;
+  final GetSearchHistoryUseCase getSearchHistoryUseCase;
   StreamSubscription? _trendingSubscription;
 
   AnalyticsBloc({
     required this.getCachedBooksUseCase,
     required this.trendingSocketService,
+    required this.getSearchHistoryUseCase,
   }) : super(AnalyticsInitial()) {
     on<LoadAnalyticsEvent>(_onLoadAnalytics);
     on<UpdateTrendingBooksEvent>(_onUpdateTrendingBooks);
@@ -33,14 +36,32 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
 
     try {
       final books = await getCachedBooksUseCase.execute(event.userId);
+      final searchHistory = await getSearchHistoryUseCase.execute(event.userId);
 
-      if (books.isEmpty) {
+      // Calculate Top Search Terms
+      final Map<String, int> termCounts = {};
+      for (final term in searchHistory) {
+        final normalized = term.trim().toLowerCase();
+        if (normalized.isNotEmpty) {
+          termCounts[normalized] = (termCounts[normalized] ?? 0) + 1;
+        }
+      }
+
+      // Sort and take top 5
+      final topTerms = Map.fromEntries(
+        termCounts.entries.toList()
+          ..sort((a, b) => b.value.compareTo(a.value))
+          ..take(5),
+      );
+
+      if (books.isEmpty && topTerms.isEmpty) {
         emit(
           const AnalyticsLoaded(
             genreDistribution: {},
             publishingTrends: {},
             trendingBooks: [],
             totalBooks: 0,
+            topSearchTerms: {},
           ),
         );
         return;
@@ -93,6 +114,7 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
               ? (state as AnalyticsLoaded).trendingBooks
               : [],
           totalBooks: books.length,
+          topSearchTerms: topTerms,
         ),
       );
     } catch (e) {
@@ -112,6 +134,7 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
           publishingTrends: currentState.publishingTrends,
           trendingBooks: event.trendingBooks,
           totalBooks: currentState.totalBooks,
+          topSearchTerms: currentState.topSearchTerms,
         ),
       );
     } else if (state is AnalyticsInitial || state is AnalyticsError) {
@@ -121,6 +144,7 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
           publishingTrends: const {},
           trendingBooks: event.trendingBooks,
           totalBooks: 0,
+          topSearchTerms: const {},
         ),
       );
     }

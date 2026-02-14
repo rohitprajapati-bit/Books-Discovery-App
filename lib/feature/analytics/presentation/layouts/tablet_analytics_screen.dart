@@ -4,6 +4,7 @@ import '../widgets/publishing_trends_chart.dart';
 import '../widgets/trending_books_section.dart';
 import '../widgets/analytics_summary_cards.dart';
 import '../bloc/analytics_state.dart';
+import '../widgets/top_search_terms_widget.dart';
 
 class TabletAnalyticsScreen extends StatelessWidget {
   final AnalyticsLoaded state;
@@ -36,6 +37,8 @@ class TabletAnalyticsScreen extends StatelessWidget {
           AnalyticsSummaryCards(state: state),
           const SizedBox(height: 32),
           TrendingBooksSection(trending: state.trendingBooks),
+          const SizedBox(height: 32),
+          TopSearchTermsWidget(terms: state.topSearchTerms),
         ],
       ),
     );

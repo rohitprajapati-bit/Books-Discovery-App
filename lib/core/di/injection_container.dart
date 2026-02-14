@@ -211,8 +211,11 @@ Future<void> initializeDependencies() async {
   );
 
   sl.registerFactory<AnalyticsBloc>(
-    () =>
-        AnalyticsBloc(getCachedBooksUseCase: sl(), trendingSocketService: sl()),
+    () => AnalyticsBloc(
+      getCachedBooksUseCase: sl(),
+      trendingSocketService: sl(),
+      getSearchHistoryUseCase: sl(),
+    ),
   );
 
   sl.registerFactory<ContactsBloc>(
