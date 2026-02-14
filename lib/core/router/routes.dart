@@ -8,8 +8,11 @@ class AppRouter extends RootStackRouter {
 
   @override
   List<AutoRoute> get routes => [
+    // Splash Route
+    AutoRoute(page: SplashRoute.page, path: '/', initial: true),
+
     // Auth Routes
-    AutoRoute(page: LoginRoute.page, path: '/login', initial: true),
+    AutoRoute(page: LoginRoute.page, path: '/login'),
     AutoRoute(page: SignupRoute.page, path: '/signup'),
 
     // Main Navigation with nested tabs

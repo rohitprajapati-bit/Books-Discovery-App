@@ -7,7 +7,6 @@ import 'package:books_discovery_app/feature/home/presentation/widgets/search_bar
 import 'package:books_discovery_app/feature/home/presentation/widgets/search_history_widget.dart';
 import 'package:books_discovery_app/feature/home/presentation/widgets/book_list_widget.dart';
 import 'package:books_discovery_app/feature/home/presentation/widgets/book_grid_widget.dart';
-import 'package:books_discovery_app/feature/auth/presentation/bloc/auth_bloc.dart';
 
 class MobileHomeScreen extends StatelessWidget {
   const MobileHomeScreen({super.key});

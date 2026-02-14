@@ -35,7 +35,7 @@ class BookDetailsBloc extends Bloc<BookDetailsEvent, BookDetailsState> {
 
       final results = await Future.wait([
         generateAISummaryUseCase.execute(event.book),
-        getBooksByAuthorUseCase.execute(authorName),
+        getBooksByAuthorUseCase.execute(authorName, event.userId),
         getAIRecommendationsUseCase.execute(event.book),
       ]);
 

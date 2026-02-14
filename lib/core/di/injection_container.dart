@@ -1,8 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:books_discovery_app/feature/profile/presentation/bloc/profile_bloc.dart';
 
 import '../../feature/auth/data/datasources/auth_local_datasource.dart';
 import '../../feature/auth/data/datasources/auth_remote_datasource.dart';
@@ -35,6 +37,13 @@ import '../../feature/home/data/services/ocr_service.dart';
 import '../../feature/home/data/services/gemini_service_impl.dart';
 import '../../feature/home/presentation/bloc/home_bloc.dart';
 import '../../feature/home/presentation/bloc/book_details_bloc.dart';
+import '../../feature/home/presentation/bloc/analytics_bloc.dart';
+import '../../feature/home/domain/usecases/get_cached_books_usecase.dart';
+import '../../feature/home/data/services/trending_socket_service.dart';
+import '../../feature/contacts/domain/repositories/contacts_repository.dart';
+import '../../feature/contacts/data/repositories/contacts_repository_impl.dart';
+import '../../feature/contacts/domain/usecases/get_contacts_usecase.dart';
+import '../../feature/contacts/presentation/bloc/contacts_bloc.dart';
 import '../network/dio_client.dart';
 
 final sl = GetIt.instance; // sl = Service Locator
@@ -52,6 +61,9 @@ Future<void> initializeDependencies() async {
 
   // Firestore
   sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
+
+  // Firebase Storage
+  sl.registerLazySingleton<FirebaseStorage>(() => FirebaseStorage.instance);
 
   // Google Sign-In
   sl.registerLazySingleton<GoogleSignIn>(() => GoogleSignIn());
@@ -72,6 +84,7 @@ Future<void> initializeDependencies() async {
       firebaseAuth: sl(),
       googleSignIn: sl(),
       firestore: sl(),
+      storage: sl(),
     ),
   );
 
@@ -93,6 +106,10 @@ Future<void> initializeDependencies() async {
     () => GeminiServiceImpl(apiKey: 'AIzaSyAsN8KoK4YE5H89GfC9lQToio9qZ4pE0u8'),
   );
 
+  sl.registerLazySingleton<TrendingSocketService>(
+    () => TrendingSocketServiceImpl(),
+  );
+
   // ============================================================================
   // Repositories
   // ============================================================================
@@ -104,6 +121,8 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton<BookRepository>(
     () => BookRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()),
   );
+
+  sl.registerLazySingleton<ContactsRepository>(() => ContactsRepositoryImpl());
 
   // ============================================================================
   // Use Cases
@@ -124,6 +143,8 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => GetBooksByAuthorUseCase(sl()));
   sl.registerLazySingleton(() => GenerateAISummaryUseCase(sl()));
   sl.registerLazySingleton(() => GetAIRecommendationsUseCase(sl()));
+  sl.registerLazySingleton(() => GetCachedBooksUseCase(sl()));
+  sl.registerLazySingleton(() => GetContactsUseCase(sl()));
 
   // ============================================================================
   // BLoCs (Factory - new instance every time)
@@ -135,6 +156,7 @@ Future<void> initializeDependencies() async {
       getCurrentUserUseCase: sl(),
       logoutUseCase: sl(),
       googleSignInUseCase: sl(),
+      clearSearchHistoryUseCase: sl(),
     ),
   );
 
@@ -167,4 +189,15 @@ Future<void> initializeDependencies() async {
       getAIRecommendationsUseCase: sl(),
     ),
   );
+
+  sl.registerFactory<AnalyticsBloc>(
+    () =>
+        AnalyticsBloc(getCachedBooksUseCase: sl(), trendingSocketService: sl()),
+  );
+
+  sl.registerFactory<ContactsBloc>(
+    () => ContactsBloc(getContactsUseCase: sl()),
+  );
+
+  sl.registerFactory<ProfileBloc>(() => ProfileBloc(authRepository: sl()));
 }

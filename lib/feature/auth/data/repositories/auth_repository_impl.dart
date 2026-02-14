@@ -67,6 +67,28 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<User> updateProfilePicture(String filePath) async {
+    try {
+      final user = await remoteDataSource.updateProfilePicture(filePath);
+      await localDataSource.cacheUser(user);
+      return user;
+    } catch (e) {
+      throw Exception(e.toString().replaceAll('Exception: ', ''));
+    }
+  }
+
+  @override
+  Future<User> updateProfileName(String newName) async {
+    try {
+      final user = await remoteDataSource.updateProfileName(newName);
+      await localDataSource.cacheUser(user);
+      return user;
+    } catch (e) {
+      throw Exception(e.toString().replaceAll('Exception: ', ''));
+    }
+  }
+
+  @override
   Future<User?> getCurrentUser() async {
     try {
       // Try to get from remote first

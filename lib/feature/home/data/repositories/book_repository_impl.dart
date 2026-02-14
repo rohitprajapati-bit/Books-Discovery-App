@@ -1,3 +1,4 @@
+import '../models/book_model.dart';
 import '../../domain/entities/book.dart';
 import '../../domain/repositories/book_repository.dart';
 import '../datasources/book_local_datasource.dart';
@@ -13,32 +14,66 @@ class BookRepositoryImpl implements BookRepository {
   });
 
   @override
-  Future<List<Book>> searchBooks(String query) async {
-    return await remoteDataSource.searchBooks(query);
+  Future<List<Book>> searchBooks(String query, {required String userId}) async {
+    final books = await remoteDataSource.searchBooks(query);
+    if (books.isNotEmpty) {
+      await cacheBooks(userId, books);
+    }
+    return books;
   }
 
   @override
-  Future<List<Book>> searchBooksByISBN(String isbn) async {
-    return await remoteDataSource.searchBooksByISBN(isbn);
+  Future<List<Book>> searchBooksByISBN(
+    String isbn, {
+    required String userId,
+  }) async {
+    final books = await remoteDataSource.searchBooksByISBN(isbn);
+    if (books.isNotEmpty) {
+      await cacheBooks(userId, books);
+    }
+    return books;
   }
 
   @override
-  Future<List<Book>> searchBooksByAuthor(String author) async {
-    return await remoteDataSource.searchBooksByAuthor(author);
+  Future<List<Book>> searchBooksByAuthor(
+    String author, {
+    required String userId,
+  }) async {
+    final books = await remoteDataSource.searchBooksByAuthor(author);
+    if (books.isNotEmpty) {
+      await cacheBooks(userId, books);
+    }
+    return books;
   }
 
   @override
-  Future<List<String>> getSearchHistory() async {
-    return await localDataSource.getSearchHistory();
+  Future<List<String>> getSearchHistory(String userId) async {
+    return await localDataSource.getSearchHistory(userId);
   }
 
   @override
-  Future<void> saveSearchQuery(String query) async {
-    await localDataSource.saveSearchQuery(query);
+  Future<void> saveSearchQuery(String userId, String query) async {
+    await localDataSource.saveSearchQuery(userId, query);
   }
 
   @override
-  Future<void> clearSearchHistory() async {
-    await localDataSource.clearSearchHistory();
+  Future<void> clearSearchHistory(String userId) async {
+    await localDataSource.clearSearchHistory(userId);
+  }
+
+  @override
+  Future<void> cacheBooks(String userId, List<Book> books) async {
+    final models = books.map((e) => BookModel.fromEntity(e)).toList();
+    await localDataSource.cacheBooks(userId, models);
+  }
+
+  @override
+  Future<List<Book>> getCachedBooks(String userId) async {
+    return await localDataSource.getCachedBooks(userId);
+  }
+
+  @override
+  Future<void> clearAllData(String userId) async {
+    await localDataSource.clearSearchHistory(userId);
   }
 }

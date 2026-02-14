@@ -6,7 +6,7 @@ class GetBooksByAuthorUseCase {
 
   GetBooksByAuthorUseCase(this.repository);
 
-  Future<List<Book>> execute(String author) async {
-    return await repository.searchBooksByAuthor(author);
+  Future<List<Book>> execute(String author, String userId) async {
+    return await repository.searchBooksByAuthor(author, userId: userId);
   }
 }

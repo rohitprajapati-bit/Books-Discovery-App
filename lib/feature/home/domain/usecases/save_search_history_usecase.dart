@@ -5,7 +5,7 @@ class SaveSearchHistoryUseCase {
 
   SaveSearchHistoryUseCase({required this.repository});
 
-  Future<void> execute(String query) async {
-    await repository.saveSearchQuery(query);
+  Future<void> execute(String userId, String query) async {
+    await repository.saveSearchQuery(userId, query);
   }
 }

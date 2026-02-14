@@ -5,7 +5,7 @@ class ClearSearchHistoryUseCase {
 
   ClearSearchHistoryUseCase({required this.repository});
 
-  Future<void> execute() async {
-    await repository.clearSearchHistory();
+  Future<void> execute(String userId) async {
+    await repository.clearAllData(userId);
   }
 }

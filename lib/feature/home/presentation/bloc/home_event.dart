@@ -9,16 +9,27 @@ abstract class HomeEvent extends Equatable {
 
 class SearchBooksEvent extends HomeEvent {
   final String query;
+  final String userId;
 
-  const SearchBooksEvent(this.query);
+  const SearchBooksEvent(this.query, this.userId);
 
   @override
-  List<Object> get props => [query];
+  List<Object> get props => [query, userId];
 }
 
-class LoadSearchHistoryEvent extends HomeEvent {}
+class LoadSearchHistoryEvent extends HomeEvent {
+  final String userId;
+  const LoadSearchHistoryEvent(this.userId);
+  @override
+  List<Object> get props => [userId];
+}
 
-class ClearSearchHistoryEvent extends HomeEvent {}
+class ClearSearchHistoryEvent extends HomeEvent {
+  final String userId;
+  const ClearSearchHistoryEvent(this.userId);
+  @override
+  List<Object> get props => [userId];
+}
 
 class ToggleViewModeEvent extends HomeEvent {}
 
@@ -26,14 +37,18 @@ class ScanQRCodeEvent extends HomeEvent {}
 
 class QRCodeScannedEvent extends HomeEvent {
   final String isbn;
-  const QRCodeScannedEvent(this.isbn);
+  final String userId;
+  const QRCodeScannedEvent(this.isbn, this.userId);
   @override
-  List<Object> get props => [isbn];
+  List<Object> get props => [isbn, userId];
 }
 
 class OCRSearchRequestedEvent extends HomeEvent {
   final String imagePath;
-  const OCRSearchRequestedEvent(this.imagePath);
+  final String userId;
+  const OCRSearchRequestedEvent(this.imagePath, this.userId);
   @override
-  List<Object> get props => [imagePath];
+  List<Object> get props => [imagePath, userId];
 }
+
+class ResetHomeEvent extends HomeEvent {}

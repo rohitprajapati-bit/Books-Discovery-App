@@ -6,7 +6,7 @@ class SearchBooksByISBNUseCase {
 
   SearchBooksByISBNUseCase(this.repository);
 
-  Future<List<Book>> execute(String isbn) {
-    return repository.searchBooksByISBN(isbn);
+  Future<List<Book>> execute(String isbn, String userId) {
+    return repository.searchBooksByISBN(isbn, userId: userId);
   }
 }

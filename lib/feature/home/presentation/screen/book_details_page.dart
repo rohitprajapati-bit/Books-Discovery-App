@@ -1,5 +1,5 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:books_discovery_app/feature/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,8 +17,12 @@ class BookDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Obtain userId from AuthBloc
+    final authState = context.read<AuthBloc>().state;
+    final userId = authState is Authenticated ? authState.user.id : '';
+
     // Add the load event to the global bloc when entering this page
-    context.read<BookDetailsBloc>().add(LoadBookDetailsEvent(book));
+    context.read<BookDetailsBloc>().add(LoadBookDetailsEvent(book, userId));
 
     return Scaffold(
       appBar: AppBar(
@@ -59,7 +63,7 @@ class BookDetailsPage extends StatelessWidget {
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
+                    color: Colors.black.withValues(alpha: 0.2),
                     blurRadius: 15,
                     offset: const Offset(0, 10),
                   ),
@@ -111,7 +115,7 @@ class BookDetailsPage extends StatelessWidget {
                               c,
                               style: const TextStyle(fontSize: 10),
                             ),
-                            backgroundColor: Colors.blue.withOpacity(0.1),
+                            backgroundColor: Colors.blue.withValues(alpha: 0.1),
                             side: BorderSide.none,
                             padding: EdgeInsets.zero,
                             visualDensity: VisualDensity.compact,

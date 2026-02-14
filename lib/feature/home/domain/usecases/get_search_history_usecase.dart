@@ -5,7 +5,7 @@ class GetSearchHistoryUseCase {
 
   GetSearchHistoryUseCase({required this.repository});
 
-  Future<List<String>> execute() async {
-    return await repository.getSearchHistory();
+  Future<List<String>> execute(String userId) async {
+    return await repository.getSearchHistory(userId);
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:books_discovery_app/feature/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../home/domain/usecases/clear_search_history_usecase.dart';
 import '../../domain/usecases/google_signin_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
 import 'auth_event.dart';
@@ -13,13 +14,15 @@ export 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final GetCurrentUserUseCase getCurrentUserUseCase;
   final LogoutUseCase logoutUseCase;
-  StreamSubscription? _authStateSubscription;
   final GoogleSignInUseCase googleSignInUseCase;
+  final ClearSearchHistoryUseCase clearSearchHistoryUseCase;
+  StreamSubscription? _authStateSubscription;
 
   AuthBloc({
     required this.getCurrentUserUseCase,
     required this.logoutUseCase,
     required this.googleSignInUseCase,
+    required this.clearSearchHistoryUseCase,
   }) : super(AuthInitial()) {
     on<AuthCheckRequested>(_onAuthCheckRequested);
     on<AuthLogoutRequested>(_onAuthLogoutRequested);
@@ -47,7 +50,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await logoutUseCase();
       emit(Unauthenticated());
     } catch (e) {
-      // Log error but still emit unauthenticated to force logout on UI
       emit(Unauthenticated());
     }
   }

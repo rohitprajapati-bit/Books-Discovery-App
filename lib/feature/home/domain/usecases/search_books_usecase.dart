@@ -6,7 +6,7 @@ class SearchBooksUseCase {
 
   SearchBooksUseCase({required this.repository});
 
-  Future<List<Book>> execute(String query) async {
-    return await repository.searchBooks(query);
+  Future<List<Book>> execute(String query, String userId) async {
+    return await repository.searchBooks(query, userId: userId);
   }
 }

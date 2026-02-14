@@ -8,7 +8,6 @@ import '../../domain/usecases/save_search_history_usecase.dart';
 import '../../domain/usecases/clear_search_history_usecase.dart';
 import '../../domain/usecases/search_books_by_isbn_usecase.dart';
 import '../../domain/usecases/extract_text_usecase.dart';
-import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'dart:io';
 
 part 'home_event.dart';
@@ -36,13 +35,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<ToggleViewModeEvent>(_onToggleViewMode);
     on<QRCodeScannedEvent>(_onQRCodeScanned);
     on<OCRSearchRequestedEvent>(_onOCRSearchRequested);
+    on<ResetHomeEvent>(_onResetHome);
   }
 
   Future<void> _onLoadSearchHistory(
     LoadSearchHistoryEvent event,
     Emitter<HomeState> emit,
   ) async {
-    final history = await getSearchHistoryUseCase.execute();
+    final history = await getSearchHistoryUseCase.execute(event.userId);
     emit(HomeInitial(viewMode: state.viewMode, searchHistory: history));
   }
 
@@ -59,11 +59,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     try {
       log('HomeBloc: Saving search history...');
-      await saveSearchHistoryUseCase.execute(event.query);
-      final history = await getSearchHistoryUseCase.execute();
+      await saveSearchHistoryUseCase.execute(event.userId, event.query);
+      final history = await getSearchHistoryUseCase.execute(event.userId);
 
       log('HomeBloc: Calling searchBooksUseCase...');
-      final books = await searchBooksUseCase.execute(event.query);
+      final books = await searchBooksUseCase.execute(event.query, event.userId);
 
       log('HomeBloc: Search success, found ${books.length} books');
       emit(
@@ -89,7 +89,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     ClearSearchHistoryEvent event,
     Emitter<HomeState> emit,
   ) async {
-    await clearSearchHistoryUseCase.execute();
+    await clearSearchHistoryUseCase.execute(event.userId);
     final updatedState = _createStateWithHistory(state, []);
     emit(updatedState);
   }
@@ -164,15 +164,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         log(
           'HomeBloc: Identified as ISBN. Searching using "isbn:" qualifier...',
         );
-        books = await searchBooksByISBNUseCase.execute(scannedValue);
+        books = await searchBooksByISBNUseCase.execute(
+          scannedValue,
+          event.userId,
+        );
       } else {
         log('HomeBloc: Identified as Text. Searching as regular query...');
-        books = await searchBooksUseCase.execute(scannedValue);
+        books = await searchBooksUseCase.execute(scannedValue, event.userId);
       }
 
       // Also save to history
-      await saveSearchHistoryUseCase.execute('Scan: $scannedValue');
-      final history = await getSearchHistoryUseCase.execute();
+      await saveSearchHistoryUseCase.execute(
+        event.userId,
+        'Scan: $scannedValue',
+      );
+      final history = await getSearchHistoryUseCase.execute(event.userId);
 
       log('HomeBloc: Search completed. Found ${books.length} books.');
       emit(
@@ -281,10 +287,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
 
       log('HomeBloc: Searching for: "$query"');
-      final books = await searchBooksUseCase.execute(query);
+      final books = await searchBooksUseCase.execute(query, event.userId);
 
-      await saveSearchHistoryUseCase.execute('OCR: $query');
-      final history = await getSearchHistoryUseCase.execute();
+      await saveSearchHistoryUseCase.execute(event.userId, 'OCR: $query');
+      final history = await getSearchHistoryUseCase.execute(event.userId);
 
       log('HomeBloc: OCR Search success, found ${books.length} books');
       emit(
@@ -304,5 +310,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         ),
       );
     }
+  }
+
+  void _onResetHome(ResetHomeEvent event, Emitter<HomeState> emit) {
+    emit(const HomeInitial());
   }
 }

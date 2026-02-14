@@ -13,6 +13,10 @@ abstract class AuthRepository {
 
   Future<void> logout();
 
+  Future<User> updateProfilePicture(String filePath);
+
+  Future<User> updateProfileName(String newName);
+
   Future<User?> getCurrentUser();
 
   Stream<User?> get authStateChanges;
