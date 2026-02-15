@@ -30,7 +30,6 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   Future<void> _onPickImage(String userId) async {
     final picker = ImagePicker();
 
-    // Show dialog to choose source
     final source = await showModalBottomSheet<ImageSource>(
       context: context,
       builder: (context) => SafeArea(
@@ -81,7 +80,6 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 controller: _controller,
                 decoration: InputDecoration(
                   hintText: 'Search books, authors...',
-                  // prefixIcon: const Icon(Icons.search),
                   suffixIcon: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

@@ -11,7 +11,6 @@ class DesktopSignupScreen extends StatelessWidget {
     return Scaffold(
       body: Row(
         children: [
-          // Left Side: Branding / Image
           Expanded(
             flex: 1,
             child: Container(
@@ -68,7 +67,6 @@ class DesktopSignupScreen extends StatelessWidget {
             ),
           ),
 
-          // Right Side: Signup Form
           Expanded(
             flex: 1,
             child: Center(

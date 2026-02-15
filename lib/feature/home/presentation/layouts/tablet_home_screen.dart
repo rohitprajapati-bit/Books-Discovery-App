@@ -30,7 +30,6 @@ class TabletHomeScreen extends StatelessWidget {
       ),
       body: Row(
         children: [
-          // Left side: Search and History
           const Expanded(
             flex: 2,
             child: Column(
@@ -41,7 +40,6 @@ class TabletHomeScreen extends StatelessWidget {
             ),
           ),
           const VerticalDivider(width: 1),
-          // Right side: Results
           Expanded(
             flex: 3,
             child: BlocBuilder<HomeBloc, HomeState>(

@@ -34,7 +34,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthCheckRequested event,
     Emitter<AuthState> emit,
   ) async {
-    // Artificial delay for splash screen animation
     await Future.delayed(const Duration(seconds: 2));
 
     final user = await getCurrentUserUseCase();

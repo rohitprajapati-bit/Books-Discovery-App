@@ -1,13 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:books_discovery_app/core/router/routes.gr.dart';
-import 'package:books_discovery_app/feature/home/domain/entities/book.dart';
-import '../bloc/book_details_bloc.dart';
-import '../bloc/book_details_state.dart';
-import 'package:lottie/lottie.dart';
+import '../../../../feature/home/domain/entities/book.dart';
+import '../widgets/book_details_components.dart';
 
 class TabletBookDetailsScreen extends StatelessWidget {
   final Book book;
@@ -48,72 +42,28 @@ class TabletBookDetailsScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Hero(
-            tag: 'book-image-${book.id}',
-            child: Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.2),
-                    blurRadius: 15,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  book.thumbnailUrl?.replaceFirst('http://', 'https://') ?? '',
-                  height: 220, // Larger image for tablet
-                  width: 150,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.book, size: 120),
-                ),
-              ),
-            ),
+          BookCoverImage(
+            imageUrl: book.thumbnailUrl,
+            heroTag: 'book-image-${book.id}',
+            height: 220,
+            width: 150,
           ),
           const SizedBox(width: 32),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  book.title,
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  'By ${book.authors.join(', ')}',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Colors.blueAccent,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                if (book.categories != null)
-                  Wrap(
-                    spacing: 12,
-                    children: book.categories!
-                        .map(
-                          (c) => Chip(
-                            label: Text(
-                              c,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                            backgroundColor: Colors.blue.withValues(alpha: 0.1),
-                            side: BorderSide.none,
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                          ),
-                        )
-                        .toList(),
-                  ),
-              ],
+            child: BookHeaderDetails(
+              title: book.title,
+              authors: book.authors,
+              categories: book.categories,
+              titleStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+              authorStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Colors.blueAccent,
+                fontWeight: FontWeight.w500,
+              ),
+              chipFontSize: 12,
+              chipPadding: const EdgeInsets.symmetric(horizontal: 8),
             ),
           ),
         ],
@@ -122,86 +72,21 @@ class TabletBookDetailsScreen extends StatelessWidget {
   }
 
   Widget _buildAISection(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24),
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.deepPurple.shade50, Colors.blue.shade50],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: AISummarySection(
+        iconSize: 28,
+        titleStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
+          fontWeight: FontWeight.bold,
+          color: Colors.deepPurple,
+          fontSize: 22,
         ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white, width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.deepPurple.withValues(alpha: 0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(
-                Icons.auto_awesome,
-                color: Colors.deepPurple,
-                size: 28,
-              ),
-              const SizedBox(width: 16),
-              Text(
-                'AI Smart Summary',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.deepPurple,
-                  fontSize: 22,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          BlocBuilder<BookDetailsBloc, BookDetailsState>(
-            builder: (context, state) {
-              if (state is BookDetailsLoading) {
-                return Center(
-                  child: Column(
-                    children: [
-                      Lottie.network(
-                        'https://assets9.lottiefiles.com/packages/lf20_p1qiuawe.json',
-                        height: 120,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const CircularProgressIndicator(),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        'Generating summary...',
-                        style: TextStyle(
-                          color: Colors.deepPurple.withValues(alpha: 0.6),
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              } else if (state is BookDetailsLoaded) {
-                return Text(
-                  state.aiSummary,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    height: 1.6,
-                    color: Colors.black87,
-                  ),
-                );
-              } else if (state is BookDetailsError) {
-                return const Text('AI Summary unavailable right now.');
-              }
-              return const SizedBox();
-            },
-          ),
-        ],
+        textStyle: const TextStyle(
+          fontSize: 16,
+          height: 1.6,
+          color: Colors.black87,
+        ),
+        loadingHeight: 120,
       ),
     );
   }
@@ -212,31 +97,28 @@ class TabletBookDetailsScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Publisher Details',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          const SizedBox(height: 16),
-          _metadataRow(Icons.business, 'Publisher', book.publisher ?? 'N/A'),
-          _metadataRow(
-            Icons.calendar_month,
-            'Published Date',
-            book.publishedDate ?? 'N/A',
-          ),
-          _metadataRow(
-            Icons.auto_stories,
-            'Page Count',
-            '${book.pageCount ?? 'N/A'}',
+          PublisherInfoList(
+            book: book,
+            sectionTitleStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+            iconSize: 20,
+            labelStyle: const TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+            ),
+            valueStyle: const TextStyle(color: Colors.black87, fontSize: 16),
           ),
           const Divider(height: 48),
-          const Text(
-            'Description',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            book.description ?? 'No official description available.',
-            style: const TextStyle(
+          BookDescriptionSection(
+            description: book.description,
+            sectionTitleStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+            textStyle: const TextStyle(
               fontSize: 16,
               height: 1.6,
               color: Colors.black87,
@@ -247,128 +129,37 @@ class TabletBookDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _metadataRow(IconData icon, String label, String value) {
+  Widget _buildAuthorRecommendations(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: Colors.grey),
-          const SizedBox(width: 12),
-          Text(
-            '$label: ',
-            style: const TextStyle(
-              color: Colors.grey,
-              fontWeight: FontWeight.w500,
-              fontSize: 16,
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(color: Colors.black87, fontSize: 16),
-            ),
-          ),
-        ],
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: AuthorRecommendationsList(
+        height: 220,
+        itemWidth: 120,
+        imageHeight: 160,
+        sectionTitleStyle: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+        ),
+        itemTitleStyle: const TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
 
-  Widget _buildAuthorRecommendations(BuildContext context) {
-    return BlocBuilder<BookDetailsBloc, BookDetailsState>(
-      builder: (context, state) {
-        if (state is BookDetailsLoaded && state.authorBooks.isNotEmpty) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
-                child: Text(
-                  'More by this Author',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                height: 220,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  itemCount: state.authorBooks.length,
-                  itemBuilder: (context, index) {
-                    final otherBook = state.authorBooks[index];
-                    return GestureDetector(
-                      onTap: () {
-                        context.router.push(BookDetailsRoute(book: otherBook));
-                      },
-                      child: Container(
-                        width: 120,
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                otherBook.thumbnailUrl?.replaceFirst(
-                                      'http://',
-                                      'https://',
-                                    ) ??
-                                    '',
-                                height: 160,
-                                width: 120,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) =>
-                                    const Icon(Icons.book, size: 80),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              otherBook.title,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        }
-        return const SizedBox();
-      },
-    );
-  }
-
   Widget _buildPreviewButton(BuildContext context) {
-    if (book.previewLink == null) return const SizedBox();
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: SizedBox(
-        width: double.infinity,
+      child: BookPreviewButton(
+        previewLink: book.previewLink,
         height: 56,
-        child: ElevatedButton.icon(
-          onPressed: () async {
-            final uri = Uri.parse(book.previewLink!);
-            if (await canLaunchUrl(uri)) {
-              await launchUrl(uri, mode: LaunchMode.externalApplication);
-            }
-          },
-          icon: const Icon(Icons.open_in_new),
-          label: const Text('Read Preview', style: TextStyle(fontSize: 18)),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blueAccent,
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
+        textStyle: const TextStyle(fontSize: 18),
+        buttonStyle: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blueAccent,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
         ),
       ),

@@ -51,7 +51,7 @@ import '../../feature/contacts/domain/usecases/get_contacts_usecase.dart';
 import '../../feature/contacts/presentation/bloc/contacts_bloc.dart';
 import '../network/dio_client.dart';
 
-final sl = GetIt.instance; // sl = Service Locator
+final sl = GetIt.instance; 
 
 /// Initialize all dependencies
 Future<void> initializeDependencies() async {
@@ -80,9 +80,7 @@ Future<void> initializeDependencies() async {
   // Dio Client
   sl.registerLazySingleton<DioClient>(() => DioClient());
 
-  // ============================================================================
   // Data Sources
-  // ============================================================================
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(
@@ -123,9 +121,7 @@ Future<void> initializeDependencies() async {
     () => TrendingSocketServiceImpl(),
   );
 
-  // ============================================================================
   // Repositories
-  // ============================================================================
 
   sl.registerLazySingleton<ProfileRepository>(
     () => ProfileRepositoryImpl(remoteDataSource: sl()),
@@ -141,9 +137,7 @@ Future<void> initializeDependencies() async {
 
   sl.registerLazySingleton<ContactsRepository>(() => ContactsRepositoryImpl());
 
-  // ============================================================================
   // Use Cases
-  // ============================================================================
 
   sl.registerLazySingleton(() => LoginUseCase(sl()));
   sl.registerLazySingleton(() => RegisterUseCase(sl()));
@@ -166,9 +160,7 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => GetCachedBooksUseCase(sl()));
   sl.registerLazySingleton(() => GetContactsUseCase(sl()));
 
-  // ============================================================================
   // BLoCs (Factory - new instance every time)
-  // ============================================================================
 
   // Global Auth BLoC - Singleton (one instance for entire app)
   sl.registerLazySingleton<AuthBloc>(

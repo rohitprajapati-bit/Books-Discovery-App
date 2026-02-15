@@ -87,7 +87,7 @@ class MyApp extends StatelessWidget {
           title: 'Books Discovery',
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
-          themeMode: ThemeMode.system,
+          themeMode: ThemeMode.light,
         ),
       ),
     );

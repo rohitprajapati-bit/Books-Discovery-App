@@ -15,7 +15,6 @@ class _DesktopLoginScreenState extends State<DesktopLoginScreen> {
     return Scaffold(
       body: Row(
         children: [
-          // Left Side: Branding / Image
           Expanded(
             flex: 1,
             child: Container(

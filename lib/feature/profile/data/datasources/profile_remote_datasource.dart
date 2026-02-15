@@ -48,6 +48,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
             try {
               await file.delete();
             } catch (e) {
+              print('Failed to delete old profile picture: $e');
               // Ignore deletion errors for old profile pics
             }
           }
@@ -128,4 +129,5 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       throw Exception('Failed to update user data: ${e.toString()}');
     }
   }
+
 }

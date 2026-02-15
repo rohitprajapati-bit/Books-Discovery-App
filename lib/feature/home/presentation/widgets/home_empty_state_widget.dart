@@ -29,7 +29,7 @@ class HomeEmptyStateWidget extends StatelessWidget {
           ),
 
           Lottie.network(
-            'https://assets5.lottiefiles.com/packages/lf20_tmsiddoc.json', // Reading/Books animation
+            'https://assets5.lottiefiles.com/packages/lf20_tmsiddoc.json', 
             height: 200,
             errorBuilder: (context, error, stackTrace) =>
                 Icon(Icons.library_books, size: 100, color: Colors.grey[300]),

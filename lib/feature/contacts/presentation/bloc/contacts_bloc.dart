@@ -16,15 +16,13 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     RequestContactsPermission event,
     Emitter<ContactsState> emit,
   ) async {
-    emit(ContactsLoading()); // Show loader during check
+    emit(ContactsLoading()); 
     try {
-      // Use flutter_contacts for both checking and requesting
       bool granted = await FlutterContacts.requestPermission(readonly: true);
 
       if (granted) {
         add(FetchContacts());
       } else {
-        // Double check with permission_handler if needed, but flutter_contacts is usually enough
         emit(ContactsPermissionDenied());
       }
     } catch (e) {

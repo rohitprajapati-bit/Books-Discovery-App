@@ -3,7 +3,8 @@ import '../../domain/entities/contact_entity.dart';
 import '../widgets/contact_card.dart';
 import '../widgets/my_profile_tile.dart';
 import '../widgets/no_contacts_view.dart';
-import '../widgets/contact_detail_bottom_sheet.dart';
+
+import '../utils/contacts_helpers.dart';
 
 class TabletContactsScreen extends StatelessWidget {
   final List<ContactEntity> contacts;
@@ -43,21 +44,12 @@ class TabletContactsScreen extends StatelessWidget {
               final contact = contacts[index];
               return ContactCard(
                 contact: contact,
-                onTap: () => _showContactDetails(context, contact),
+                onTap: () => showContactDetails(context, contact),
               );
             }, childCount: contacts.length),
           ),
         ),
       ],
-    );
-  }
-
-  void _showContactDetails(BuildContext context, ContactEntity contact) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => ContactDetailBottomSheet(contact: contact),
     );
   }
 }

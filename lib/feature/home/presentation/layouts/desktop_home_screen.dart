@@ -50,7 +50,6 @@ class DesktopHomeScreen extends StatelessWidget {
       ),
       body: Row(
         children: [
-          // Sidebar: Search History
           Container(
             width: 300,
             color: Colors.grey[50],
@@ -68,7 +67,6 @@ class DesktopHomeScreen extends StatelessWidget {
             ),
           ),
           const VerticalDivider(width: 1),
-          // Main Content: Search Bar and Results
           Expanded(
             child: Column(
               children: [

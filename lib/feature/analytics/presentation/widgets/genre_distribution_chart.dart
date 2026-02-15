@@ -8,6 +8,7 @@ class GenreDistributionChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     final List<Color> colors = [
       Colors.blue,
       Colors.green,

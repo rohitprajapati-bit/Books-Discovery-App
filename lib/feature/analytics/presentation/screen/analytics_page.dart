@@ -22,7 +22,7 @@ class AnalyticsPage extends StatelessWidget {
           if (state is AnalyticsLoading) {
             return Center(
               child: Lottie.network(
-                'https://assets2.lottiefiles.com/packages/lf20_a2chheio.json', // Data analysis loading
+                'https://assets2.lottiefiles.com/packages/lf20_a2chheio.json',
                 height: 200,
                 errorBuilder: (context, e, s) =>
                     const CircularProgressIndicator(),
@@ -57,9 +57,12 @@ class AnalyticsPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Lottie.network(
-            'https://assets10.lottiefiles.com/packages/lf20_qpwbv5gm.json', // Empty box / no data
+            'https://lottie.host/5e263074-6725-4c03-88ee-14c1d7373f13/2p2sswCqwY.json', // Updated working Lottie URL
             height: 250,
             repeat: false,
+            errorBuilder: (context, error, stackTrace) {
+              return const Icon(Icons.search_off, size: 80, color: Colors.grey);
+            },
           ),
           const SizedBox(height: 16),
           const Text(

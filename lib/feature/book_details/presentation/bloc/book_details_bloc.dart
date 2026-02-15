@@ -26,7 +26,6 @@ class BookDetailsBloc extends Bloc<BookDetailsEvent, BookDetailsState> {
     emit(BookDetailsLoading());
 
     try {
-      // Run fetching in parallel
       final authorName = event.book.authors.isNotEmpty
           ? event.book.authors.first
           : 'Unknown';
@@ -60,7 +59,6 @@ class BookDetailsBloc extends Bloc<BookDetailsEvent, BookDetailsState> {
     RefreshAISummaryEvent event,
     Emitter<BookDetailsState> emit,
   ) async {
-    // Keep current state but mark as loading (or just re-load)
     if (state is BookDetailsLoaded) {
       final currentState = state as BookDetailsLoaded;
       try {
@@ -73,7 +71,7 @@ class BookDetailsBloc extends Bloc<BookDetailsEvent, BookDetailsState> {
           ),
         );
       } catch (e) {
-        // Ignore errors during AI summary refresh
+        emit(BookDetailsError(e.toString()));
       }
     }
   }
