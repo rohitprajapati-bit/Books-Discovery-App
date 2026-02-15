@@ -42,13 +42,17 @@ lib/
 
 ## Screenshots
 
-| Home | Analytics | Profile |
+| Home (Grid) | Home (List) | Analytics |
 |:---:|:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/dbb939c8-e14d-40cd-8a34-e8fa54bd20cc" width="250"> | <img src="screenshots/analytics.png" width="250"> | <img src="screenshots/profile.png" width="250"> |
+| <img src="https://github.com/user-attachments/assets/dbb939c8-e14d-40cd-8a34-e8fa54bd20cc" width="250"> | <img src="screenshots/home_list.png" width="250"> | <img src="screenshots/analytics.png" width="250"> |
 
-| Book Details | QR Scanner | Dark Mode |
+| Book Details | AI Summary | Profile |
 |:---:|:---:|:---:|
-| <img src="screenshots/details.png" width="250"> | <img src="screenshots/scanner.png" width="250"> | <img src="screenshots/dark_mode.png" width="250"> |
+| <img src="screenshots/details.png" width="250"> | <img src="screenshots/details_ai.png" width="250"> | <img src="screenshots/profile.png" width="250"> |
+
+| QR Scanner |
+|:---:|
+| <img src="screenshots/scanner.png" width="250"> |
 
 ---
 
