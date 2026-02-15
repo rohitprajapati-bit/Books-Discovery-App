@@ -45,6 +45,8 @@ lib/
 | Home | Analytics | Profile |
 |:---:|:---:|:---:|
 | ![Home](screenshots/home_mobile.png) | ![Analytics](screenshots/analytics.png) | ![Profile](screenshots/profile.png) |
+| ![Home Mobile](screenshots/home_tablet.png)
+) | ![Home Tablet](screenshots/home_tablet.png) | ![Analytics](screenshots/analytics.png) |
 
 | Book Details | QR Scanner | Dark Mode |
 |:---:|:---:|:---:|
