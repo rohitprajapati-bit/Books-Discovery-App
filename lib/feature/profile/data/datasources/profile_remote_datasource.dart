@@ -72,7 +72,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
       if (updatedUser == null) throw Exception('User is null after reload');
       return UserModel.fromFirebaseUser(updatedUser);
-    } catch (e, stack) {
+    } catch (e) {
       throw Exception(
         'Failed to update profile picture locally: ${e.toString()}',
       );

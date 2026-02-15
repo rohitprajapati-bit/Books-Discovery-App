@@ -17,6 +17,7 @@ import 'feature/auth/presentation/register/bloc/register_bloc.dart';
 import 'feature/home/presentation/bloc/home_bloc.dart';
 import 'feature/book_details/presentation/bloc/book_details_bloc.dart';
 import 'feature/analytics/presentation/bloc/analytics_bloc.dart';
+import 'core/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -84,10 +85,9 @@ class MyApp extends StatelessWidget {
           routerConfig: _appRouter.config(),
           debugShowCheckedModeBanner: false,
           title: 'Books Discovery',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
-          ),
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: ThemeMode.system,
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:books_discovery_app/feature/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/app_colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/router/routes.gr.dart';
 import '../../shared/widgets/email_field.dart';
@@ -40,7 +41,7 @@ class _LoginFormState extends State<LoginForm> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(authState.error),
-              backgroundColor: Colors.red,
+              backgroundColor: Theme.of(context).colorScheme.error,
             ),
           );
         }
@@ -51,12 +52,15 @@ class _LoginFormState extends State<LoginForm> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Welcome ${state.user.name}!'),
-                backgroundColor: Colors.green,
+                backgroundColor: AppColors.success,
               ),
             );
           } else if (state is LoginFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error), backgroundColor: Colors.red),
+              SnackBar(
+                content: Text(state.error),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ),
             );
           }
         },
