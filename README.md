@@ -10,7 +10,33 @@ A Flutter-based application for discovering books, featuring real-time trends, A
 - **Real-time Trends**: View live trending books with sales updates via WebSocket.
 - **AI Integration**: Get AI-generated summaries and recommendations using Gemini API.
 - **Analytics**: Visualize your search history and reading interests.
+- **Profile Management**: Update profile picture and name with background sync.
 - **Multi-Platform**: Responsive design for Mobile, Tablet, and Desktop.
+
+## Technical Stack
+
+- **Architecture**: Clean Architecture (Presentation, Domain, Data layers).
+- **State Management**: `flutter_bloc`.
+- **Dependency Injection**: `get_it` & `injectable`.
+- **Navigation**: `auto_route`.
+- **Networking**: `dio` / `http`.
+- **Local Storage**: `shared_preferences` & `sqflite` (if applicable).
+- **Testing**: `mocktail`, `bloc_test`.
+
+## Project Structure
+
+```
+lib/
+├── core/                   # Global utilities, DI, Router, etc.
+├── feature/                # Feature-based modules
+│   ├── auth/               # Authentication (Login, Register, Splash)
+│   ├── home/               # Home screen, Search, Discovery
+│   ├── book_details/       # Book Details, Reviews, AI Summary
+│   ├── profile/            # User Profile management
+│   ├── analytics/          # Usage stats and visualization
+│   └── contacts/           # Contact integration
+└── main.dart               # App entry point
+```
 
 ---
 
@@ -46,11 +72,13 @@ We track user search behavior to provide personalized insights.
 
 **Data Flow:**
 1.  **Local Storage**: Every successful search is saved locally using `SharedPreferences` (via `SearchHistoryRepository`).
-2.  **Processing**: `AnalyticsBloc` retrieves this history and calculates:
-    - **Top Search Terms**: Frequency analysis of search queries.
-    - **Genre Distribution**: Categorization of viewed books (mocked or derived from API data).
-    - **Publishing Trends**: Analysis of publication years.
-3.  **Visualization**: Data is presented using `fl_chart` for graphs and custom widgets for lists.
+2.  **Processing**: `AnalyticsBloc` retrieves this history asynchronously:
+    - **Top Search Terms**: Computed by frequency analysis of local search queries.
+    - **Genre Distribution**: Derived from the `categories` field of viewed/searched books.
+    - **Publishing Trends**: Extracted from `publishedDate` to categorize books by decade.
+3.  **Visualization**: Data is presented using:
+    - **Pie Charts**: For Genre distribution.
+    - **Bar Charts**: For detailed trends (using `fl_chart`).
 
 ---
 
@@ -68,7 +96,7 @@ Real-time features are powered by a WebSocket connection (currently simulated).
 
 ## Gemini AI Usage
 
-We leverage Google's **Gemini Pro** model for enhanced content.
+We leverage Google's **Gemini 2.5 Flash** model for enhanced content.
 
 - **Summaries**:
     - When a user views a book, a prompt is sent to Gemini: *"Summarize [Book Title] by [Author]..."*
@@ -77,6 +105,15 @@ We leverage Google's **Gemini Pro** model for enhanced content.
     - Contextual recommendations are generated based on the currently viewed book.
     - Prompt: *"Recommend 5 books similar to [Book Title]..."*
 - **Privacy**: No personal user data is sent to Gemini; only book metadata is used for context.
+
+---
+
+## Profile & Authentication
+
+- **Non-blocking Updates**: Profile updates (image/name) happen in the background with a non-blocking loading overlay, ensuring smooth UX.
+- **Security**:
+    - **Logout Confirmation**: Prevents accidental session termination.
+    - **Session Management**: Auth state is managed via `AuthBloc` and persists across app restarts.
 
 ---
 
