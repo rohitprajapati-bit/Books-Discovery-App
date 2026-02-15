@@ -1,4 +1,4 @@
-import '../entities/book.dart';
+import '../../../home/domain/entities/book.dart';
 import '../services/ai_service.dart';
 
 class GenerateAISummaryUseCase {

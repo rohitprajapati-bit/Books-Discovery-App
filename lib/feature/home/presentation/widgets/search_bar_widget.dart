@@ -74,73 +74,70 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
       builder: (context, authState) {
         final userId = authState is Authenticated ? authState.user.id : '';
 
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  decoration: InputDecoration(
-                    hintText: 'Search books, authors...',
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (_controller.text.isNotEmpty)
-                          IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: () {
-                              setState(() {
-                                _controller.clear();
-                              });
-                            },
-                          ),
+        return Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _controller,
+                decoration: InputDecoration(
+                  hintText: 'Search books, authors...',
+                  // prefixIcon: const Icon(Icons.search),
+                  suffixIcon: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (_controller.text.isNotEmpty)
                         IconButton(
-                          icon: const Icon(
-                            Icons.photo_camera,
-                            color: Colors.blueAccent,
-                          ),
-                          onPressed: () => _onPickImage(userId),
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            setState(() {
+                              _controller.clear();
+                            });
+                          },
                         ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.search,
-                            color: Colors.blueAccent,
-                          ),
-                          onPressed: () => _onSearch(userId),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.photo_camera,
+                          color: Colors.blueAccent,
                         ),
-                      ],
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
+                        onPressed: () => _onPickImage(userId),
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.search,
+                          color: Colors.blueAccent,
+                        ),
+                        onPressed: () => _onSearch(userId),
+                      ),
+                    ],
                   ),
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  onSubmitted: (_) => _onSearch(userId),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
-              ),
-              const SizedBox(width: 8),
-              BlocBuilder<HomeBloc, HomeState>(
-                builder: (context, state) {
-                  return IconButton(
-                    icon: Icon(
-                      state.viewMode == HomeViewMode.list
-                          ? Icons.grid_view
-                          : Icons.view_list,
-                    ),
-                    onPressed: () {
-                      context.read<HomeBloc>().add(ToggleViewModeEvent());
-                    },
-                  );
+                onChanged: (value) {
+                  setState(() {});
                 },
+                onSubmitted: (_) => _onSearch(userId),
               ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 8),
+            BlocBuilder<HomeBloc, HomeState>(
+              builder: (context, state) {
+                return IconButton(
+                  icon: Icon(
+                    state.viewMode == HomeViewMode.list
+                        ? Icons.grid_view
+                        : Icons.view_list,
+                  ),
+                  onPressed: () {
+                    context.read<HomeBloc>().add(ToggleViewModeEvent());
+                  },
+                );
+              },
+            ),
+          ],
         );
       },
     );

@@ -21,34 +21,36 @@ class SearchHistoryWidget extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Recent Searches',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Recent Searches',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
                       ),
-                      TextButton(
-                        onPressed: () {
-                          context.read<HomeBloc>().add(
-                            ClearSearchHistoryEvent(userId),
-                          );
-                        },
-                        child: const Text('Clear All'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        context.read<HomeBloc>().add(
+                          ClearSearchHistoryEvent(userId),
+                        );
+                      },
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(50, 30),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                    ],
-                  ),
+                      child: const Text('Clear All'),
+                    ),
+                  ],
                 ),
                 SizedBox(
-                  height: 40,
+                  height: 32,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     itemCount: state.searchHistory.length,
                     itemBuilder: (context, index) {
                       final query = state.searchHistory[index];
@@ -56,11 +58,15 @@ class SearchHistoryWidget extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 8),
                         child: ActionChip(
                           label: Text(query),
+                          visualDensity: VisualDensity.compact,
                           onPressed: () {
                             context.read<HomeBloc>().add(
                               SearchBooksEvent(query, userId),
                             );
                           },
+                          padding: EdgeInsets.zero,
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),

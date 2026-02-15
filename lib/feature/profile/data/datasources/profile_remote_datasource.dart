@@ -47,7 +47,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
               p.basename(file.path).startsWith('profile_${user.uid}')) {
             try {
               await file.delete();
-            } catch (e) {}
+            } catch (e) {
+              // Ignore deletion errors for old profile pics
+            }
           }
         }
       }
@@ -93,10 +95,11 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
       await _updateUserInFirestore(uid: user.uid, name: newName);
 
-      if (updatedUser == null)
+      if (updatedUser == null) {
         throw ServerException(message: 'User is null after reload');
+      }
       return UserModel.fromFirebaseUser(updatedUser);
-    } catch (e, stack) {
+    } catch (e) {
       throw ServerException(
         message: 'Failed to update profile name',
         code: e.toString(),

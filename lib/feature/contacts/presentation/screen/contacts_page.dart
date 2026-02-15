@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:books_discovery_app/core/di/injection_container.dart';
 import 'package:books_discovery_app/feature/contacts/presentation/bloc/contacts_bloc.dart';
 import 'package:books_discovery_app/feature/contacts/presentation/bloc/contacts_event.dart';
 import 'package:books_discovery_app/feature/contacts/presentation/bloc/contacts_state.dart';
@@ -19,54 +18,50 @@ class ContactsPage extends StatefulWidget {
 }
 
 class _ContactsPageState extends State<ContactsPage> {
-  late final ContactsBloc _contactsBloc;
-
   @override
   void initState() {
     super.initState();
-    _contactsBloc = sl<ContactsBloc>();
-    _contactsBloc.add(RequestContactsPermission());
+
+    context.read<ContactsBloc>().add(RequestContactsPermission());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _contactsBloc,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Contacts'),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          foregroundColor: Colors.black,
-        ),
-        body: BlocBuilder<ContactsBloc, ContactsState>(
-          builder: (context, state) {
-            if (state is ContactsLoading || state is ContactsInitial) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is ContactsLoaded) {
-              return ResponsiveLayout(
-                mobileBody: MobileContactsScreen(contacts: state.contacts),
-                tabletBody: TabletContactsScreen(contacts: state.contacts),
-                desktopBody: DesktopContactsScreen(contacts: state.contacts),
-              );
-            } else if (state is ContactsPermissionDenied) {
-              return _buildPermissionError(
-                'Permission Denied',
-                'We need contact permissions to show your list.',
-                onRetry: () => _contactsBloc.add(RequestContactsPermission()),
-              );
-            } else if (state is ContactsPermissionPermanentlyDenied) {
-              return _buildPermissionError(
-                'Permission Permanently Denied',
-                'Please enable contacts permission in system settings.',
-                isSystemSettings: true,
-              );
-            } else if (state is ContactsError) {
-              return Center(child: Text('Error: ${state.message}'));
-            }
-            return const SizedBox.shrink();
-          },
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Contacts'),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.black,
+      ),
+      body: BlocBuilder<ContactsBloc, ContactsState>(
+        builder: (context, state) {
+          if (state is ContactsLoading || state is ContactsInitial) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is ContactsLoaded) {
+            return ResponsiveLayout(
+              mobileBody: MobileContactsScreen(contacts: state.contacts),
+              tabletBody: TabletContactsScreen(contacts: state.contacts),
+              desktopBody: DesktopContactsScreen(contacts: state.contacts),
+            );
+          } else if (state is ContactsPermissionDenied) {
+            return _buildPermissionError(
+              'Permission Denied',
+              'We need contact permissions to show your list.',
+              onRetry: () =>
+                  context.read<ContactsBloc>().add(RequestContactsPermission()),
+            );
+          } else if (state is ContactsPermissionPermanentlyDenied) {
+            return _buildPermissionError(
+              'Permission Permanently Denied',
+              'Please enable contacts permission in system settings.',
+              isSystemSettings: true,
+            );
+          } else if (state is ContactsError) {
+            return Center(child: Text('Error: ${state.message}'));
+          }
+          return const SizedBox.shrink();
+        },
       ),
     );
   }

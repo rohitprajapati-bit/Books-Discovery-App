@@ -1,5 +1,5 @@
-import '../entities/book.dart';
-import '../repositories/book_repository.dart';
+import '../../../home/domain/entities/book.dart';
+import '../../../home/domain/repositories/book_repository.dart';
 
 class GetBooksByAuthorUseCase {
   final BookRepository repository;

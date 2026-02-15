@@ -32,7 +32,7 @@ import 'package:books_discovery_app/feature/contacts/presentation/screen/contact
     as _i4;
 import 'package:books_discovery_app/feature/home/domain/entities/book.dart'
     as _i17;
-import 'package:books_discovery_app/feature/home/presentation/screen/book_details_page.dart'
+import 'package:books_discovery_app/feature/book_details/presentation/screen/book_details_page.dart'
     as _i3;
 import 'package:books_discovery_app/feature/home/presentation/screen/home_page.dart'
     as _i6;

@@ -26,7 +26,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       final user = await updateProfilePictureUseCase.execute(event.filePath);
 
       emit(ProfileUpdateSuccess(user));
-    } catch (e, stack) {
+    } catch (e) {
       emit(ProfileFailure(e.toString()));
     }
   }
@@ -41,7 +41,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       final user = await updateProfileNameUseCase.execute(event.newName);
 
       emit(ProfileUpdateSuccess(user));
-    } catch (e, stack) {
+    } catch (e) {
       emit(ProfileFailure(e.toString()));
     }
   }

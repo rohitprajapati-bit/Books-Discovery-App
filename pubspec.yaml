@@ -50,7 +50,7 @@ dependencies:
   permission_handler: ^11.3.1
   google_mlkit_text_recognition: ^0.14.0
   image_picker: ^1.1.2
-  google_generative_ai:
+  google_generative_ai: ^0.4.7
   intl: ^0.19.0
   url_launcher: ^6.3.0
   fl_chart: ^0.70.2

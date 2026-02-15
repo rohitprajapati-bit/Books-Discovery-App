@@ -35,8 +35,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<ToggleViewModeEvent>(_onToggleViewMode);
     on<QRCodeScannedEvent>(_onQRCodeScanned);
     on<OCRSearchRequestedEvent>(_onOCRSearchRequested);
+    on<RetryHomeEvent>(_onRetryHome);
     on<ResetHomeEvent>(_onResetHome);
   }
+
+  HomeEvent? _lastEvent;
 
   Future<void> _onLoadSearchHistory(
     LoadSearchHistoryEvent event,
@@ -51,6 +54,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) async {
     if (event.query.trim().isEmpty) return;
+    _lastEvent = event;
 
     emit(
       HomeLoading(viewMode: state.viewMode, searchHistory: state.searchHistory),
@@ -141,6 +145,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     QRCodeScannedEvent event,
     Emitter<HomeState> emit,
   ) async {
+    _lastEvent = event;
     final scannedValue = event.isbn.trim();
 
     emit(
@@ -192,6 +197,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     OCRSearchRequestedEvent event,
     Emitter<HomeState> emit,
   ) async {
+    _lastEvent = event;
     emit(
       HomeLoading(viewMode: state.viewMode, searchHistory: state.searchHistory),
     );
@@ -286,6 +292,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           searchHistory: state.searchHistory,
         ),
       );
+    }
+  }
+
+  void _onRetryHome(RetryHomeEvent event, Emitter<HomeState> emit) {
+    if (_lastEvent != null) {
+      add(_lastEvent!);
     }
   }
 

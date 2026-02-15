@@ -14,7 +14,7 @@ class HomeEmptyStateWidget extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: BlocBuilder<AnalyticsBloc, AnalyticsState>(
               builder: (context, analyticsState) {
                 if (analyticsState is AnalyticsLoaded &&
@@ -27,14 +27,13 @@ class HomeEmptyStateWidget extends StatelessWidget {
               },
             ),
           ),
-          const SizedBox(height: 10),
+
           Lottie.network(
             'https://assets5.lottiefiles.com/packages/lf20_tmsiddoc.json', // Reading/Books animation
             height: 200,
             errorBuilder: (context, error, stackTrace) =>
                 Icon(Icons.library_books, size: 100, color: Colors.grey[300]),
           ),
-          const SizedBox(height: 10),
           const Text(
             'Search for your favorite books!',
             style: TextStyle(color: Colors.grey, fontSize: 16),

@@ -1,4 +1,4 @@
-import '../entities/book.dart';
+import '../../../home/domain/entities/book.dart';
 
 abstract class AIService {
   Future<String> generateBookSummary(Book book);

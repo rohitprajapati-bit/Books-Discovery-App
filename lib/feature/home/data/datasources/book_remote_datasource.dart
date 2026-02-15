@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
 import '../../../../core/error/exceptions.dart';
 
@@ -19,7 +21,7 @@ class BookRemoteDataSourceImpl implements BookRemoteDataSource {
     try {
       final response = await dioClient.get(
         'volumes',
-        queryParameters: {'q': query},
+        queryParameters: {'q': query, 'key': ApiConstants.googleBooksApiKey},
       );
 
       if (response.statusCode == 200) {
@@ -34,6 +36,20 @@ class BookRemoteDataSourceImpl implements BookRemoteDataSource {
           message: 'Failed to load books. Status Code: ${response.statusCode}',
         );
       }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 429) {
+        throw ServerException(
+          message:
+              'Daily quota exceeded for Google Books API. Please try again tomorrow or use a different API key.',
+          code: 'quota_exceeded',
+        );
+      }
+      throw ServerException(
+        message:
+            e.response?.statusMessage ??
+            'Failed to search books. Please check your connection.',
+        code: e.response?.statusCode?.toString() ?? 'unknown',
+      );
     } catch (e) {
       throw ServerException(
         message: 'Failed to search books. Please check your connection.',

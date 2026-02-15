@@ -51,4 +51,6 @@ class OCRSearchRequestedEvent extends HomeEvent {
   List<Object> get props => [imagePath, userId];
 }
 
+class RetryHomeEvent extends HomeEvent {}
+
 class ResetHomeEvent extends HomeEvent {}

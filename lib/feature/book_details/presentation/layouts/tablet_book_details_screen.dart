@@ -1,52 +1,42 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:books_discovery_app/feature/auth/presentation/bloc/auth_bloc.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../../core/router/routes.gr.dart';
-import '../../domain/entities/book.dart';
+import 'package:books_discovery_app/core/router/routes.gr.dart';
+import 'package:books_discovery_app/feature/home/domain/entities/book.dart';
 import '../bloc/book_details_bloc.dart';
-import '../bloc/book_details_event.dart';
 import '../bloc/book_details_state.dart';
 import 'package:lottie/lottie.dart';
 
-@RoutePage()
-class BookDetailsPage extends StatelessWidget {
+class TabletBookDetailsScreen extends StatelessWidget {
   final Book book;
 
-  const BookDetailsPage({super.key, required this.book});
+  const TabletBookDetailsScreen({super.key, required this.book});
 
   @override
   Widget build(BuildContext context) {
-    // Obtain userId from AuthBloc
-    final authState = context.read<AuthBloc>().state;
-    final userId = authState is Authenticated ? authState.user.id : '';
-
-    // Add the load event to the global bloc when entering this page
-    context.read<BookDetailsBloc>().add(LoadBookDetailsEvent(book, userId));
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Book Details'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(context),
-            const SizedBox(height: 24),
-            _buildAISection(context),
-            const SizedBox(height: 24),
-            _buildMetadataSection(context),
-            const SizedBox(height: 24),
-            _buildAuthorRecommendations(context),
-            const SizedBox(height: 24),
-            _buildPreviewButton(context),
-            const SizedBox(height: 40),
-          ],
+    // For tablet, we can just constrain the width to keep readability
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 600),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(context),
+              const SizedBox(height: 32),
+              _buildAISection(context),
+              const SizedBox(height: 32),
+              _buildMetadataSection(context),
+              const SizedBox(height: 32),
+              _buildAuthorRecommendations(context),
+              const SizedBox(height: 32),
+              _buildPreviewButton(context),
+              const SizedBox(height: 48),
+            ],
+          ),
         ),
       ),
     );
@@ -54,7 +44,7 @@ class BookDetailsPage extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -74,52 +64,51 @@ class BookDetailsPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
                   book.thumbnailUrl?.replaceFirst('http://', 'https://') ?? '',
-                  height: 180,
-                  width: 120,
+                  height: 220, // Larger image for tablet
+                  width: 150,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.book, size: 100),
+                      const Icon(Icons.book, size: 120),
                 ),
               ),
             ),
           ),
-          const SizedBox(width: 20),
+          const SizedBox(width: 32),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   book.title,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 Text(
                   'By ${book.authors.join(', ')}',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: Colors.blueAccent,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 16),
                 if (book.categories != null)
                   Wrap(
-                    spacing: 8,
+                    spacing: 12,
                     children: book.categories!
                         .map(
                           (c) => Chip(
                             label: Text(
                               c,
-                              style: const TextStyle(fontSize: 10),
+                              style: const TextStyle(fontSize: 12),
                             ),
                             backgroundColor: Colors.blue.withValues(alpha: 0.1),
                             side: BorderSide.none,
-                            padding: EdgeInsets.zero,
-                            visualDensity: VisualDensity.compact,
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
                           ),
                         )
                         .toList(),
@@ -134,8 +123,8 @@ class BookDetailsPage extends StatelessWidget {
 
   Widget _buildAISection(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [Colors.deepPurple.shade50, Colors.blue.shade50],
@@ -160,20 +149,20 @@ class BookDetailsPage extends StatelessWidget {
               const Icon(
                 Icons.auto_awesome,
                 color: Colors.deepPurple,
-                size: 24,
+                size: 28,
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 16),
               Text(
                 'AI Smart Summary',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Colors.deepPurple,
-                  fontSize: 18,
+                  fontSize: 22,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           BlocBuilder<BookDetailsBloc, BookDetailsState>(
             builder: (context, state) {
               if (state is BookDetailsLoading) {
@@ -181,17 +170,17 @@ class BookDetailsPage extends StatelessWidget {
                   child: Column(
                     children: [
                       Lottie.network(
-                        'https://assets9.lottiefiles.com/packages/lf20_p1qiuawe.json', // AI / Magic sparkle animation
-                        height: 100,
+                        'https://assets9.lottiefiles.com/packages/lf20_p1qiuawe.json',
+                        height: 120,
                         errorBuilder: (context, error, stackTrace) =>
                             const CircularProgressIndicator(),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 12),
                       Text(
                         'Generating summary...',
                         style: TextStyle(
                           color: Colors.deepPurple.withValues(alpha: 0.6),
-                          fontSize: 12,
+                          fontSize: 14,
                         ),
                       ),
                     ],
@@ -201,7 +190,7 @@ class BookDetailsPage extends StatelessWidget {
                 return Text(
                   state.aiSummary,
                   style: const TextStyle(
-                    fontSize: 15,
+                    fontSize: 16,
                     height: 1.6,
                     color: Colors.black87,
                   ),
@@ -219,15 +208,15 @@ class BookDetailsPage extends StatelessWidget {
 
   Widget _buildMetadataSection(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             'Publisher Details',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           _metadataRow(Icons.business, 'Publisher', book.publisher ?? 'N/A'),
           _metadataRow(
             Icons.calendar_month,
@@ -239,17 +228,17 @@ class BookDetailsPage extends StatelessWidget {
             'Page Count',
             '${book.pageCount ?? 'N/A'}',
           ),
-          const Divider(height: 32),
+          const Divider(height: 48),
           const Text(
             'Description',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Text(
             book.description ?? 'No official description available.',
             style: const TextStyle(
-              fontSize: 15,
-              height: 1.5,
+              fontSize: 16,
+              height: 1.6,
               color: Colors.black87,
             ),
           ),
@@ -260,20 +249,24 @@ class BookDetailsPage extends StatelessWidget {
 
   Widget _metadataRow(IconData icon, String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: Colors.grey),
-          const SizedBox(width: 8),
+          Icon(icon, size: 20, color: Colors.grey),
+          const SizedBox(width: 12),
           Text(
             '$label: ',
             style: const TextStyle(
               color: Colors.grey,
               fontWeight: FontWeight.w500,
+              fontSize: 16,
             ),
           ),
           Expanded(
-            child: Text(value, style: const TextStyle(color: Colors.black87)),
+            child: Text(
+              value,
+              style: const TextStyle(color: Colors.black87, fontSize: 16),
+            ),
           ),
         ],
       ),
@@ -288,18 +281,18 @@ class BookDetailsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Text(
                   'More by this Author',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
               SizedBox(
-                height: 180,
+                height: 220,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   itemCount: state.authorBooks.length,
                   itemBuilder: (context, index) {
                     final otherBook = state.authorBooks[index];
@@ -308,8 +301,8 @@ class BookDetailsPage extends StatelessWidget {
                         context.router.push(BookDetailsRoute(book: otherBook));
                       },
                       child: Container(
-                        width: 100,
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        width: 120,
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -321,20 +314,20 @@ class BookDetailsPage extends StatelessWidget {
                                       'https://',
                                     ) ??
                                     '',
-                                height: 120,
-                                width: 100,
+                                height: 160,
+                                width: 120,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) =>
-                                    const Icon(Icons.book, size: 60),
+                                    const Icon(Icons.book, size: 80),
                               ),
                             ),
-                            const SizedBox(height: 4),
+                            const SizedBox(height: 8),
                             Text(
                               otherBook.title,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 11,
+                                fontSize: 13,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -357,10 +350,10 @@ class BookDetailsPage extends StatelessWidget {
     if (book.previewLink == null) return const SizedBox();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: SizedBox(
         width: double.infinity,
-        height: 50,
+        height: 56,
         child: ElevatedButton.icon(
           onPressed: () async {
             final uri = Uri.parse(book.previewLink!);
@@ -369,12 +362,12 @@ class BookDetailsPage extends StatelessWidget {
             }
           },
           icon: const Icon(Icons.open_in_new),
-          label: const Text('Read Preview'),
+          label: const Text('Read Preview', style: TextStyle(fontSize: 18)),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blueAccent,
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
             ),
           ),
         ),

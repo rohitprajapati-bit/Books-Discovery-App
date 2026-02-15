@@ -66,7 +66,19 @@ class TabletHomeScreen extends StatelessWidget {
                 } else if (state is HomeFailure) {
                   content = Center(
                     key: const ValueKey('error'),
-                    child: Text('Error: ${state.message}'),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Error: ${state.message}'),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            context.read<HomeBloc>().add(RetryHomeEvent());
+                          },
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
                   );
                 } else {
                   content = const Center(

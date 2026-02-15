@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/usecases/get_books_by_author_usecase.dart';
-import '../../domain/usecases/generate_ai_summary_usecase.dart';
-import '../../domain/usecases/get_ai_recommendations_usecase.dart';
+import 'package:books_discovery_app/feature/book_details/domain/usecases/get_books_by_author_usecase.dart';
+import 'package:books_discovery_app/feature/book_details/domain/usecases/generate_ai_summary_usecase.dart';
+import 'package:books_discovery_app/feature/book_details/domain/usecases/get_ai_recommendations_usecase.dart';
 import 'book_details_event.dart';
 import 'book_details_state.dart';
 
@@ -72,7 +72,9 @@ class BookDetailsBloc extends Bloc<BookDetailsEvent, BookDetailsState> {
             aiRecommendations: currentState.aiRecommendations,
           ),
         );
-      } catch (e) {}
+      } catch (e) {
+        // Ignore errors during AI summary refresh
+      }
     }
   }
 }

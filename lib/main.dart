@@ -8,12 +8,14 @@ import 'core/di/injection_container.dart';
 import 'core/router/routes.dart';
 import 'core/router/routes.gr.dart';
 import 'feature/analytics/presentation/bloc/analytics_event.dart';
+import 'feature/contacts/presentation/bloc/contacts_bloc.dart';
+import 'feature/profile/presentation/bloc/profile_bloc.dart';
 import 'firebase_options.dart';
 import 'feature/auth/presentation/bloc/auth_bloc.dart';
 import 'feature/auth/presentation/login/bloc/login_bloc.dart';
 import 'feature/auth/presentation/register/bloc/register_bloc.dart';
 import 'feature/home/presentation/bloc/home_bloc.dart';
-import 'feature/home/presentation/bloc/book_details_bloc.dart';
+import 'feature/book_details/presentation/bloc/book_details_bloc.dart';
 import 'feature/analytics/presentation/bloc/analytics_bloc.dart';
 
 void main() async {
@@ -53,6 +55,8 @@ class MyApp extends StatelessWidget {
           create: (context) => sl<BookDetailsBloc>(),
         ),
         BlocProvider<AnalyticsBloc>(create: (context) => sl<AnalyticsBloc>()),
+        BlocProvider<ContactsBloc>(create: (context) => sl<ContactsBloc>()),
+        BlocProvider<ProfileBloc>(create: (context) => sl<ProfileBloc>()),
       ],
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {

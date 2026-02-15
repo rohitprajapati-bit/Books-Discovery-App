@@ -1,5 +1,7 @@
+import 'dart:developer';
+
 import 'package:google_generative_ai/google_generative_ai.dart';
-import '../../domain/entities/book.dart';
+import '../../../home/domain/entities/book.dart';
 import '../../domain/services/ai_service.dart';
 
 class GeminiServiceImpl implements AIService {
@@ -7,7 +9,7 @@ class GeminiServiceImpl implements AIService {
   late final GenerativeModel _model;
 
   GeminiServiceImpl({required this.apiKey}) {
-    _model = GenerativeModel(model: 'gemini-pro', apiKey: apiKey);
+    _model = GenerativeModel(model: 'gemini-2.5-flash', apiKey: apiKey);
   }
 
   @override
@@ -28,6 +30,7 @@ class GeminiServiceImpl implements AIService {
       if (e.toString().contains('403') || e.toString().contains('permission')) {
         return 'AI Summary: Access denied. Please check your API key permissions/billing.';
       }
+      log('AI Summary currently unavailable. (${e.toString()})');
       return 'AI Summary currently unavailable. ($e)';
     }
   }

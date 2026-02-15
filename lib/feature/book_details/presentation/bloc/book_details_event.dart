@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../domain/entities/book.dart';
+import 'package:books_discovery_app/feature/home/domain/entities/book.dart';
 
 abstract class BookDetailsEvent extends Equatable {
   const BookDetailsEvent();

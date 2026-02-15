@@ -33,15 +33,15 @@ import '../../feature/home/domain/usecases/save_search_history_usecase.dart';
 import '../../feature/home/domain/usecases/search_books_usecase.dart';
 import '../../feature/home/domain/usecases/search_books_by_isbn_usecase.dart';
 import '../../feature/home/domain/usecases/extract_text_usecase.dart';
-import '../../feature/home/domain/usecases/get_books_by_author_usecase.dart';
-import '../../feature/home/domain/usecases/generate_ai_summary_usecase.dart';
-import '../../feature/home/domain/usecases/get_ai_recommendations_usecase.dart';
+import '../../feature/book_details/domain/usecases/get_books_by_author_usecase.dart';
+import '../../feature/book_details/domain/usecases/generate_ai_summary_usecase.dart';
+import '../../feature/book_details/domain/usecases/get_ai_recommendations_usecase.dart';
 import '../../feature/home/domain/services/ocr_service.dart';
-import '../../feature/home/domain/services/ai_service.dart';
+import '../../feature/book_details/domain/services/ai_service.dart';
 import '../../feature/home/data/services/ocr_service.dart';
-import '../../feature/home/data/services/gemini_service_impl.dart';
+import '../../feature/book_details/data/services/gemini_service_impl.dart';
 import '../../feature/home/presentation/bloc/home_bloc.dart';
-import '../../feature/home/presentation/bloc/book_details_bloc.dart';
+import '../../feature/book_details/presentation/bloc/book_details_bloc.dart';
 import '../../feature/analytics/presentation/bloc/analytics_bloc.dart';
 import '../../feature/analytics/domain/usecases/get_cached_books_usecase.dart';
 import '../../feature/analytics/data/services/trending_socket_service.dart';
@@ -116,7 +116,7 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton<OCRService>(() => OCRServiceImpl());
 
   sl.registerLazySingleton<AIService>(
-    () => GeminiServiceImpl(apiKey: 'AIzaSyAsN8KoK4YE5H89GfC9lQToio9qZ4pE0u8'),
+    () => GeminiServiceImpl(apiKey: 'AIzaSyC7Fj6Oc2bRVTlWF7iRi9_aImiTzTALFnI'),
   );
 
   sl.registerLazySingleton<TrendingSocketService>(
