@@ -113,7 +113,8 @@ The app uses Firebase for Authentication and User Data.
 
 **Configuration:**
 - **Auth**: Email/Password and Google Sign-In.
-- **Firestore**: Stores user profiles and potential cloud-synced settings.
+- **Firestore**: Stores user names and other metadata.
+- **Local Storage**: Profile pictures are saved directly on the device (avoiding Cloud Storage costs).
 
 **Security Best Practices:**
 - `google-services.json` (Android) and `GoogleService-Info.plist` (iOS) are required for Firebase but should **NOT** be committed to public repositories.
