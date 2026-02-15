@@ -44,7 +44,8 @@ lib/
 
 | Home (Grid) | Home (List) | Analytics |
 |:---:|:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/dbb939c8-e14d-40cd-8a34-e8fa54bd20cc" width="250"> | <img src="screenshots/home_list.png" width="250"> | <img src="screenshots/analytics.png" width="250"> |
+| <img src="https://github.com/user-attachments/assets/dbb939c8-e14d-40cd-8a34-e8fa54bd20cc" width="250"> | <img src="<img width="1408" height="2974" alt="home_list png" src="https://github.com/user-attachments/assets/cfabf765-a939-4fb1-a9b5-27d0adc063e6" />
+" width="250"> | <img src="screenshots/analytics.png" width="250"> |
 
 | Book Details | AI Summary | Profile |
 |:---:|:---:|:---:|
