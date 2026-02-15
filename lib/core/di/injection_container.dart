@@ -226,6 +226,7 @@ Future<void> initializeDependencies() async {
     () => ProfileBloc(
       updateProfilePictureUseCase: sl(),
       updateProfileNameUseCase: sl(),
+      authBloc: sl(),
     ),
   );
 }

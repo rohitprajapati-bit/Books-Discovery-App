@@ -35,12 +35,12 @@ class MobileHomeScreen extends StatelessWidget {
                     );
                   } else if (homeState is HomeSuccess) {
                     content = homeState.viewMode == HomeViewMode.grid
-                        ? BookListWidget(
-                            key: const ValueKey('list'),
+                        ? BookGridWidget(
+                            key: const ValueKey('grid'),
                             books: homeState.books,
                           )
-                        : BookGridWidget(
-                            key: const ValueKey('grid'),
+                        : BookListWidget(
+                            key: const ValueKey('list'),
                             books: homeState.books,
                           );
                   } else if (homeState is HomeFailure) {

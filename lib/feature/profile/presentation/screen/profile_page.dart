@@ -63,7 +63,26 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   void _onLogout() {
-    context.read<AuthBloc>().add(const AuthLogoutRequested());
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              context.read<AuthBloc>().add(const AuthLogoutRequested());
+            },
+            child: const Text('Logout', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -72,13 +91,10 @@ class _ProfilePageState extends State<ProfilePage>
       appBar: AppBar(title: const Text('My Profile'), centerTitle: true),
       body: BlocListener<ProfileBloc, ProfileState>(
         listener: (context, state) {
-          if (state is ProfileLoading) {}
           if (state is ProfileUpdateSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Profile updated successfully!')),
             );
-            // Directly update the AuthBloc with the new user object to force a UI refresh
-            context.read<AuthBloc>().add(AuthUserChanged(state.user));
 
             // If it's a name update, we might want to restart the animation
             _sizeController.reset();
@@ -89,41 +105,58 @@ class _ProfilePageState extends State<ProfilePage>
             );
           }
         },
-        child: BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, state) {
-            if (state is Authenticated) {
-              final user = state.user;
-              return ResponsiveLayout(
-                mobileBody: MobileProfileScreen(
-                  user: user,
-                  onPickImage: _pickImage,
-                  onEditName: _onEditName,
-                  onLogout: _onLogout,
-                  sizeAnimation: _sizeAnimation,
-                ),
-                tabletBody: DesktopProfileScreen(
-                  user: user,
-                  onPickImage: _pickImage,
-                  onEditName: _onEditName,
-                  onLogout: _onLogout,
-                  sizeAnimation: _sizeAnimation,
-                ),
-                desktopBody: DesktopProfileScreen(
-                  user: user,
-                  onPickImage: _pickImage,
-                  onEditName: _onEditName,
-                  onLogout: _onLogout,
-                  sizeAnimation: _sizeAnimation,
-                ),
-              );
-            }
-            return const Center(
-              child: Padding(
-                padding: EdgeInsets.only(top: 100),
-                child: CircularProgressIndicator(),
-              ),
-            );
-          },
+        child: Stack(
+          children: [
+            BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                if (state is Authenticated) {
+                  final user = state.user;
+                  return ResponsiveLayout(
+                    mobileBody: MobileProfileScreen(
+                      user: user,
+                      onPickImage: _pickImage,
+                      onEditName: _onEditName,
+                      onLogout: _onLogout,
+                      sizeAnimation: _sizeAnimation,
+                    ),
+                    tabletBody: DesktopProfileScreen(
+                      user: user,
+                      onPickImage: _pickImage,
+                      onEditName: _onEditName,
+                      onLogout: _onLogout,
+                      sizeAnimation: _sizeAnimation,
+                    ),
+                    desktopBody: DesktopProfileScreen(
+                      user: user,
+                      onPickImage: _pickImage,
+                      onEditName: _onEditName,
+                      onLogout: _onLogout,
+                      sizeAnimation: _sizeAnimation,
+                    ),
+                  );
+                }
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 100),
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              },
+            ),
+            BlocBuilder<ProfileBloc, ProfileState>(
+              builder: (context, state) {
+                if (state is ProfileLoading) {
+                  return Container(
+                    color: Colors.black.withValues(alpha: 0.3),
+                    child: const Center(
+                      child: CircularProgressIndicator(color: Colors.white),
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          ],
         ),
       ),
     );

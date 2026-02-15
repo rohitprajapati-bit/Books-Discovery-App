@@ -28,12 +28,7 @@ class _ContactsPageState extends State<ContactsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Contacts'),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
-      ),
+      appBar: AppBar(title: const Text('Contacts'), elevation: 0),
       body: BlocBuilder<ContactsBloc, ContactsState>(
         builder: (context, state) {
           if (state is ContactsLoading || state is ContactsInitial) {

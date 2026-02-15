@@ -27,11 +27,7 @@ class BookDetailsPage extends StatelessWidget {
     context.read<BookDetailsBloc>().add(LoadBookDetailsEvent(book, userId));
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Book Details'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('Book Details'), elevation: 0),
       body: ResponsiveLayout(
         mobileBody: MobileBookDetailsScreen(book: book),
         tabletBody: TabletBookDetailsScreen(book: book),

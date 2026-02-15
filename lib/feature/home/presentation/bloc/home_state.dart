@@ -14,7 +14,7 @@ abstract class HomeState extends Equatable {
 
 class HomeInitial extends HomeState {
   const HomeInitial({
-    super.viewMode = HomeViewMode.list,
+    super.viewMode = HomeViewMode.grid,
     super.searchHistory = const [],
   });
 }

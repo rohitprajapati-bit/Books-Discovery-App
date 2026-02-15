@@ -59,6 +59,12 @@ class MyApp extends StatelessWidget {
         BlocProvider<ProfileBloc>(create: (context) => sl<ProfileBloc>()),
       ],
       child: BlocListener<AuthBloc, AuthState>(
+        listenWhen: (previous, current) {
+          // Only listen if the authentication status changes (e.g., Unauthenticated -> Authenticated)
+          // or if we explicitly want to handle specific side effects.
+          // We DO NOT want to navigate when updating profile (Authenticated -> Authenticated).
+          return previous.runtimeType != current.runtimeType;
+        },
         listener: (context, state) {
           if (state is Authenticated) {
             // Re-load history for the authenticated user
