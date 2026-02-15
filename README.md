@@ -48,7 +48,8 @@ lib/
 
 | Book Details | QR Scanner | Profile | Contacts |
 |:---:|:---:|:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/121c5ed1-8d52-4d5a-b50e-6b99927e46ad" width="200"> | <img src="https://github.com/user-attachments/assets/1eb5cfd5-d752-43b7-b309-5f438ebd823c" width="200"> | <img src="https://github.com/user-attachments/assets/3cc4f71e-c593-467f-ac80-8f3bc105be1e" width="200"> | <!-- Add Contacts Screenshot --> |
+| <img src="https://github.com/user-attachments/assets/121c5ed1-8d52-4d5a-b50e-6b99927e46ad" width="200"> | <img src="https://github.com/user-attachments/assets/1eb5cfd5-d752-43b7-b309-5f438ebd823c" width="200"> | <img src="https://github.com/user-attachments/assets/3cc4f71e-c593-467f-ac80-8f3bc105be1e" width="200"> | <img src="https://github.com/user-attachments/assets/ae03842f-3f12-4991-91e9-dee7b8215071" width="200"> 
+
 
 
 ## Search Mechanisms
