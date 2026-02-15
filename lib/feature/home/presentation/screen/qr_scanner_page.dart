@@ -127,9 +127,9 @@ class _QRScannerPageState extends State<QRScannerPage>
 
                 switch (state.cameraDirection) {
                   case CameraFacing.front:
-                    return const Icon(Icons.camera_front);
+                    return const Icon(Icons.camera_alt);
                   case CameraFacing.back:
-                    return const Icon(Icons.camera_rear);
+                    return const Icon(Icons.camera_alt);
                 }
               },
             ),
