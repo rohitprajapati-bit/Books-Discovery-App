@@ -44,7 +44,8 @@ lib/
 
 | Home | Analytics | Profile |
 |:---:|:---:|:---:|
-| ![Home](screenshots/home_mobile.png) | ![Analytics](screenshots/analytics.png) | ![Profile](screenshots/profile.png) |
+| ![Home](<img width="1408" height="2974" alt="home_mobile png" src="https://github.com/user-attachments/assets/dbb939c8-e14d-40cd-8a34-e8fa54bd20cc" />
+) | ![Analytics](screenshots/analytics.png) | ![Profile](screenshots/profile.png) |
 | ![Home Mobile](screenshots/home_tablet.png)
 | ![Home Tablet](screenshots/home_tablet.png) | ![Analytics](screenshots/analytics.png) |
 
