@@ -44,7 +44,7 @@ lib/
 
 | Home (Mobile) | Home (Tablet) | Analytics |
 |:---:|:---:|:---:|
-| ![Home Mobile](<img width="1408" height="2974" alt="Screenshot_20260215_153535" src="https://github.com/user-attachments/assets/be6f5ca0-1a1d-4a07-87c2-9a711ae5cd49" />
+| ![Home Mobile](screenshots/home_tablet.png)
 ) | ![Home Tablet](screenshots/home_tablet.png) | ![Analytics](screenshots/analytics.png) |
 
 | Book Details | QR Scanner | Dark Mode |
