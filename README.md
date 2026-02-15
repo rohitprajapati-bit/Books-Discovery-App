@@ -2,7 +2,7 @@
 
 A Flutter-based application for discovering books, featuring real-time trends, AI-powered insights, and comprehensive analytics.
 
-![App Banner](screenshots/banner.png)
+<img src="screenshots/banner.png" width="100%" alt="App Banner">
 
 ## Features
 
@@ -44,14 +44,11 @@ lib/
 
 | Home | Analytics | Profile |
 |:---:|:---:|:---:|
-| ![Home](<img width="1408" height="2974" alt="home_mobile png" src="https://github.com/user-attachments/assets/dbb939c8-e14d-40cd-8a34-e8fa54bd20cc" />
-) | ![Analytics](screenshots/analytics.png) | ![Profile](screenshots/profile.png) |
-| ![Home Mobile](screenshots/home_tablet.png)
-| ![Home Tablet](screenshots/home_tablet.png) | ![Analytics](screenshots/analytics.png) |
+| <img src="https://github.com/user-attachments/assets/dbb939c8-e14d-40cd-8a34-e8fa54bd20cc" width="250"> | <img src="screenshots/analytics.png" width="250"> | <img src="screenshots/profile.png" width="250"> |
 
 | Book Details | QR Scanner | Dark Mode |
 |:---:|:---:|:---:|
-| ![Details](screenshots/details.png) | ![Scanner](screenshots/scanner.png) | ![Dark Mode](screenshots/dark_mode.png) |
+| <img src="screenshots/details.png" width="250"> | <img src="screenshots/scanner.png" width="250"> | <img src="screenshots/dark_mode.png" width="250"> |
 
 ---
 
