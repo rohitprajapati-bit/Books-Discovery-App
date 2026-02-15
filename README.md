@@ -2,13 +2,13 @@
 
 A Flutter-based application for discovering books, featuring real-time trends, AI-powered insights, and comprehensive analytics.
 
-
 ## Features
 
 - **Book Discovery**: Search for books by title, author, or ISBN.
-- **Real-time Trends**: View live trending books with sales updates via WebSocket.
+- **Real-time Trends**: View live trending books with sales updates via WebSocket simulation.
 - **AI Integration**: Get AI-generated summaries and recommendations using Gemini API.
 - **Analytics**: Visualize your search history and reading interests.
+- **Contacts Integration**: Access and explore contacts within the app.
 - **Profile Management**: Update profile picture and name with background sync.
 - **Multi-Platform**: Responsive design for Mobile, Tablet, and Desktop.
 
@@ -18,9 +18,10 @@ A Flutter-based application for discovering books, featuring real-time trends, A
 - **State Management**: `flutter_bloc`.
 - **Dependency Injection**: `get_it` & `injectable`.
 - **Navigation**: `auto_route`.
-- **Networking**: `dio` / `http`.
-- **Local Storage**: `shared_preferences` & `sqflite` (if applicable).
-- **Testing**: `mocktail`, `bloc_test`.
+- **Networking**: `dio`.
+- **Local Storage**: `shared_preferences`.
+- **AI**: Google Gemini API (`gemini-2.5-flash`).
+- **Realtime**: Simulated WebSocket service.
 
 ## Project Structure
 
@@ -45,9 +46,9 @@ lib/
 |:---:|:---:|:---:|
 | <img src="https://github.com/user-attachments/assets/e28df62c-4172-4894-bee4-6a512a5f18c5" width="200"> | <img src="https://github.com/user-attachments/assets/25ac8dbb-4b7f-4731-bfe2-bc0a6db03d67" width="200"> | <img src="https://github.com/user-attachments/assets/0b413107-486a-48b7-a0f5-e20b6a1159e8" width="200"> |
 
-| Book Details | QR Scanner | Profile |
-|:---:|:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/121c5ed1-8d52-4d5a-b50e-6b99927e46ad" width="200"> | <img src="https://github.com/user-attachments/assets/1eb5cfd5-d752-43b7-b309-5f438ebd823c" width="200"> | <img src="https://github.com/user-attachments/assets/3cc4f71e-c593-467f-ac80-8f3bc105be1e" width="200"> |
+| Book Details | QR Scanner | Profile | Contacts |
+|:---:|:---:|:---:|:---:|
+| <img src="https://github.com/user-attachments/assets/121c5ed1-8d52-4d5a-b50e-6b99927e46ad" width="200"> | <img src="https://github.com/user-attachments/assets/1eb5cfd5-d752-43b7-b309-5f438ebd823c" width="200"> | <img src="https://github.com/user-attachments/assets/3cc4f71e-c593-467f-ac80-8f3bc105be1e" width="200"> | <!-- Add Contacts Screenshot --> |
 
 
 ## Search Mechanisms
@@ -69,7 +70,7 @@ The app supports multiple ways to find books:
 We track user search behavior to provide personalized insights.
 
 **Data Flow:**
-1.  **Local Storage**: Every successful search is saved locally using `SharedPreferences` (via `SearchHistoryRepository`).
+1.  **Local Storage**: Every successful search is saved locally using `SharedPreferences`.
 2.  **Processing**: `AnalyticsBloc` retrieves this history asynchronously:
     - **Top Search Terms**: Computed by frequency analysis of local search queries.
     - **Genre Distribution**: Derived from the `categories` field of viewed/searched books.
@@ -82,12 +83,13 @@ We track user search behavior to provide personalized insights.
 
 ## WebSocket Integration
 
-Real-time features are powered by a WebSocket connection (currently simulated).
+Real-time features are powered by a simulated WebSocket connection.
 
-- **Service**: `TrendingSocketService`
+- **Service**: `TrendingSocketService` (Simulated)
 - **Functionality**:
     - Establishes a stream of `TrendingBook` updates.
-    - Emits updates every few seconds with changing "Sales" numbers and "Trend Scores".
+    - Uses a `Timer.periodic` to mock real-time data pushes every 5 seconds.
+    - Emits updates with changing "Sales" numbers and "Trend Scores".
 - **UI Updates**: The `HomeBloc` and `AnalyticsBloc` listen to this stream and update the UI instantaneously, showing live "Up/Down" indicators.
 
 ---
@@ -98,33 +100,25 @@ We leverage Google's **Gemini 2.5 Flash** model for enhanced content.
 
 - **Summaries**:
     - When a user views a book, a prompt is sent to Gemini: *"Summarize [Book Title] by [Author]..."*
-    - The response is streamed or displayed as a concise paragraph.
+    - The response is displayed as a concise paragraph.
 - **Recommendations**:
     - Contextual recommendations are generated based on the currently viewed book.
-    - Prompt: *"Recommend 5 books similar to [Book Title]..."*
-- **Privacy**: No personal user data is sent to Gemini; only book metadata is used for context.
+- **Privacy**: No personal user data is sent to Gemini; only public book metadata is used for context.
 
 ---
 
-## Profile & Authentication
-
-- **Non-blocking Updates**: Profile updates (image/name) happen in the background with a non-blocking loading overlay, ensuring smooth UX.
-- **Security**:
-    - **Logout Confirmation**: Prevents accidental session termination.
-    - **Session Management**: Auth state is managed via `AuthBloc` and persists across app restarts.
-
----
-
-## Firebase Setup
+## Firebase Setup (Secure)
 
 The app uses Firebase for Authentication and User Data.
 
 **Configuration:**
 - **Auth**: Email/Password and Google Sign-In.
 - **Firestore**: Stores user profiles and potential cloud-synced settings.
-- **Security**:
-    - `google-services.json` (Android) and `GoogleService-Info.plist` (iOS) are required but **NOT** included in the repo for security.
-    - API Keys are managed via environment variables or secure config files.
+
+**Security Best Practices:**
+- `google-services.json` (Android) and `GoogleService-Info.plist` (iOS) are required for Firebase but should **NOT** be committed to public repositories.
+- API Keys in `firebase_options.dart` are restricted to specific platforms (Android/iOS) via Google Cloud Console to prevent misuse.
+- For production, consider using environment variables to inject sensitive keys at build time.
 
 **To run this project:**
 1.  Create a Firebase project.
