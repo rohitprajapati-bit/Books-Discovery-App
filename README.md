@@ -42,9 +42,9 @@ lib/
 
 ## Screenshots
 
-| Home (Mobile) | Home (Tablet) | Analytics |
+| Home | Analytics | Profile |
 |:---:|:---:|:---:|
-| ![Home Mobile](screenshots/home_mobile.png) | ![Home Tablet](screenshots/home_tablet.png) | ![Analytics](screenshots/analytics.png) |
+| ![Home](screenshots/home_mobile.png) | ![Analytics](screenshots/analytics.png) | ![Profile](screenshots/profile.png) |
 
 | Book Details | QR Scanner | Dark Mode |
 |:---:|:---:|:---:|
