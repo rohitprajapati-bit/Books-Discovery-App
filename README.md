@@ -2,7 +2,6 @@
 
 A Flutter-based application for discovering books, featuring real-time trends, AI-powered insights, and comprehensive analytics.
 
-<img src="screenshots/banner.png" width="250" alt="App Banner">
 
 ## Features
 
@@ -44,7 +43,7 @@ lib/
 
 | Home (Grid) | Home (List) | Analytics |
 |:---:|:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/dbb939c8-e14d-40cd-8a34-e8fa54bd20cc" width="250"> | <img src="https://github.com/user-attachments/assets/cfabf765-a939-4fb1-a9b5-27d0adc063e6" width="250"> | <img src="screenshots/analytics.png" width="250"> |
+| <img src="https://github.com/user-attachments/assets/dbb939c8-e14d-40cd-8a34-e8fa54bd20cc" width="250"> | <img src="https://github.com/user-attachments/assets/cfabf765-a939-4fb1-a9b5-27d0adc063e6" width="250"> | <img src="https://github.com/user-attachments/assets/a4cd9ed2-28cd-4f3c-89b8-f1deeb385b99cc" width="250"> |
 
 | Book Details | AI Summary | Profile |
 |:---:|:---:|:---:|
