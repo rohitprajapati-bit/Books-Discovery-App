@@ -43,21 +43,11 @@ lib/
 
 | Home (Grid) | Home (List) | Analytics |
 |:---:|:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/dbb939c8-e14d-40cd-8a34-e8fa54bd20cc" width="250"> | <img src="https://github.com/user-attachments/assets/cfabf765-a939-4fb1-a9b5-27d0adc063e6" width="250"> | <img src="https://github.com/user-attachments/assets/a4cd9ed2-28cd-4f3c-89b8-f1deeb385b99cc" width="250"> |
+| <img src="https://github.com/user-attachments/assets/e28df62c-4172-4894-bee4-6a512a5f18c5" width="200"> | <img src="https://github.com/user-attachments/assets/25ac8dbb-4b7f-4731-bfe2-bc0a6db03d67" width="200"> | <img src="https://github.com/user-attachments/assets/0b413107-486a-48b7-a0f5-e20b6a1159e8" width="200"> |
 
-| Book Details | Contact | Profile |
+| Book Details | QR Scanner | Profile |
 |:---:|:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/565e7edb-b5cd-4771-92e7-ae0a4244817bcc" width="250"> | <img src="screenshots/details_ai.png" width="250"> | <img src="screenshots/profile.png" width="250"> |
-
-| QR Scanner |
-|:---:|
-| <img src="screenshots/scanner.png" width="250"> |
-<img width="1408" height="2974" alt="book_details png" src="https://github.com/user-attachments/assets/121c5ed1-8d52-4d5a-b50e-6b99927e46ad" />
-<img width="1408" height="2974" alt="analytics png" src="https://github.com/user-attachments/assets/0b413107-486a-48b7-a0f5-e20b6a1159e8" />
-<img width="1408" height="2974" alt="scanner png" src="https://github.com/user-attachments/assets/1eb5cfd5-d752-43b7-b309-5f438ebd823c" />
-<img width="1408" height="2974" alt="profile png" src="https://github.com/user-attachments/assets/3cc4f71e-c593-467f-ac80-8f3bc105be1e" />
-<img width="1408" height="2974" alt="home_list png" src="https://github.com/user-attachments/assets/25ac8dbb-4b7f-4731-bfe2-bc0a6db03d67" />
-<img width="1408" height="2974" alt="home_grid png" src="https://github.com/user-attachments/assets/e28df62c-4172-4894-bee4-6a512a5f18c5" />
+| <img src="https://github.com/user-attachments/assets/121c5ed1-8d52-4d5a-b50e-6b99927e46ad" width="200"> | <img src="https://github.com/user-attachments/assets/1eb5cfd5-d752-43b7-b309-5f438ebd823c" width="200"> | <img src="https://github.com/user-attachments/assets/3cc4f71e-c593-467f-ac80-8f3bc105be1e" width="200"> |
 
 
 ## Search Mechanisms
